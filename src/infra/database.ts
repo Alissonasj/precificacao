@@ -26,4 +26,11 @@ async function getUsers() {
   return users;
 }
 
-export { getUsers, insertUser, query };
+const database = {
+  getUsers,
+  insertUser,
+  query,
+  db
+};
+
+export { database };

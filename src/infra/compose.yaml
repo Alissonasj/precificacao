@@ -3,6 +3,6 @@ services:
     container_name: postgres_precificacao
     image: postgres:17.4-alpine3.21
     env_file:
-      - ../../env.development
+      - ../../.env.development
     ports:
       - 5432:5432
