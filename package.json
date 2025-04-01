@@ -11,7 +11,10 @@
     "services:down": "docker compose -f ./src/infra/compose.yaml down",
     "services:stop": "docker compose -f ./src/infra/compose.yaml stop",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "drizzle:generate": "npx drizzle-kit generate",
+    "drizzle:migrate": "npx drizzle-kit migrate",
+    "drizzle:push": "npx drizzle-kit push"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
