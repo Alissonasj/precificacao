@@ -1,4 +1,4 @@
-import { database } from '@/infra/database';
+import { database } from '@/infra/database/database';
 import { sql } from 'drizzle-orm';
 
 export async function GET() {
@@ -17,7 +17,7 @@ export async function GET() {
   const updatedDate = new Date().toLocaleString('pt-BR');
 
   const serverStatus = {
-    updated_date: updatedDate,
+    updated_at: updatedDate,
     server_version: serverVersion.server_version,
     max_connections: maxConnections.max_connections,
     opened_connetions: openedConnetionsValue
