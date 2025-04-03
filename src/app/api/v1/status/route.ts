@@ -1,12 +1,13 @@
 import { database } from '@/infra/database/database';
 import { sql } from 'drizzle-orm';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const serverVersion = await database.query('SHOW server_version;');
   const maxConnections = await database.query('SHOW max_connections;');
 
   const databaseName = process.env.POSTGRES_DB;
-  const openedConnetions = await database.db
+  const openedConnetions = await database.client
     .select({
       value: sql`count('*')`.mapWith(Number)
     })
@@ -23,5 +24,5 @@ export async function GET() {
     opened_connetions: openedConnetionsValue
   };
 
-  return Response.json(serverStatus);
+  return NextResponse.json(serverStatus);
 }
