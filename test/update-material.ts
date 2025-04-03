@@ -1,11 +1,30 @@
-import { database } from '@/infra/database/database';
+import { MaterialSelect } from '@/app/types/material-type';
+// import { materialDb } from '@/infra/database/material-db';
 
-const material = await database.getMaterialById(3);
+// const material = await materialDb.getById(3);
 
-const materialUpdated = {
-  ...material[0],
-  material: 'NOVO MATERIAL',
-  materialGroup: 'GRUPO ATUALIZADO'
-};
+// const materialUpdated = {
+//   ...material[0],
+//   material: 'NOVO MATERIAL',
+//   materialGroup: 'GRUPO ATUALIZADO'
+// };
 
-database.updateMaterial(materialUpdated);
+// materialDb.update(materialUpdated);
+
+(async () => {
+  const material: MaterialSelect = {
+    id: 2,
+    material: 'PRADA ATUALIZADO',
+    materialGroup: 'SINTÉTICO ATUALIZADO',
+    price: 77
+  };
+
+  const url = 'http://localhost:3000/api/v1/materials';
+  const response = await fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify(material)
+  });
+  const data = await response.json();
+
+  console.log(data);
+})();
