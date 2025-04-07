@@ -3,7 +3,7 @@ import { materialDb } from '@/infra/database/material-db';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const url = new URL(request.url);
+  const url = request.nextUrl;
   const searchParamsId = url.searchParams.get('id');
 
   if (searchParamsId) {
