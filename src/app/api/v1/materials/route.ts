@@ -2,7 +2,16 @@ import { MaterialInsert, MaterialSelect } from '@/app/types/material-type';
 import { materialDb } from '@/infra/database/material-db';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const searchParamsId = url.searchParams.get('id');
+
+  if (searchParamsId) {
+    const material = await materialDb.getById(searchParamsId);
+
+    return NextResponse.json(material);
+  }
+
   const materials = await materialDb.getAll();
 
   return Response.json(materials);
