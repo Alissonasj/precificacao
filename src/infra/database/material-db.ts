@@ -13,13 +13,13 @@ async function getAll() {
   return materials;
 }
 
-async function getById(id: number) {
+async function getById(id: string) {
   const material = await database.client
     .select()
     .from(materialsTable)
     .where(eq(materialsTable.id, id));
 
-  return material;
+  return material[0];
 }
 
 async function update(material: MaterialSelect) {
@@ -33,7 +33,7 @@ async function update(material: MaterialSelect) {
     .where(eq(materialsTable.id, material.id));
 }
 
-async function deleteById(id: number) {
+async function deleteById(id: string) {
   await database.client.delete(materialsTable).where(eq(materialsTable.id, id));
 }
 
