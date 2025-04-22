@@ -7,7 +7,7 @@ dotenvExpand.expand(dotenv.config({ path: '.env.development' }));
 
 export default defineConfig({
   out: './drizzle',
-  schema: './src/infra/database/schemas/*',
+  schema: './src/infra/schemas/*',
   dialect: 'postgresql',
   dbCredentials: {
     url: process.env.POSTGRES_URL!,
