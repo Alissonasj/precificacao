@@ -1,5 +1,5 @@
-import { MaterialInsert, MaterialSelect } from '@/app/types/material-type';
-import { materialDb } from '@/infra/database/material-db';
+import { materials } from '@/infra/queries/materials';
+import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -7,14 +7,14 @@ export async function GET(request: NextRequest) {
   const searchParamsId = url.searchParams.get('id');
 
   if (searchParamsId) {
-    const material = await materialDb.getById(searchParamsId);
+    const materialResult = await materials.getById(searchParamsId);
 
-    return NextResponse.json(material);
+    return NextResponse.json(materialResult);
   }
 
-  const materials = await materialDb.getAll();
+  const materialsResult = await materials.getAll();
 
-  return Response.json(materials);
+  return Response.json(materialsResult);
 }
 
 export async function POST(request: NextRequest) {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     price: requestData.price
   };
 
-  materialDb.insert(material);
+  await materials.create(material);
 
   return NextResponse.json(material);
 }
@@ -36,10 +36,13 @@ export async function PUT(request: NextRequest) {
     id: requestData.id,
     material: requestData.material,
     materialGroup: requestData.materialGroup,
-    price: requestData.price
+    price: requestData.price,
+    baseWidth: requestData.baseWidth,
+    createdAt: requestData.createdAt,
+    updatedAt: new Date()
   };
 
-  materialDb.update(material);
+  await materials.update(material);
 
   return NextResponse.json(material);
 }
@@ -47,7 +50,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const requestData: Pick<MaterialSelect, 'id'> = await request.json();
 
-  materialDb.deleteById(requestData.id);
+  await materials.deleteById(requestData.id);
 
   return NextResponse.json(requestData.id);
 }

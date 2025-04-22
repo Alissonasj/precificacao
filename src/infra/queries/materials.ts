@@ -1,9 +1,9 @@
-import { MaterialInsert, MaterialSelect } from '@/app/types/material-type';
+import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { eq } from 'drizzle-orm';
-import { database } from './database';
-import { materialsTable } from './schemas/materials';
+import { database } from '../database';
+import { materialsTable } from '../schemas/materials';
 
-async function insert(material: MaterialInsert) {
+async function create(material: MaterialInsert) {
   await database.client.insert(materialsTable).values(material);
 }
 
@@ -28,7 +28,10 @@ async function update(material: MaterialSelect) {
     .set({
       material: material.material,
       materialGroup: material.materialGroup,
-      price: material.price
+      price: material.price,
+      baseWidth: material.baseWidth,
+      createdAt: material.createdAt,
+      updatedAt: material.updatedAt
     })
     .where(eq(materialsTable.id, material.id));
 }
@@ -37,12 +40,12 @@ async function deleteById(id: string) {
   await database.client.delete(materialsTable).where(eq(materialsTable.id, id));
 }
 
-const materialDb = {
+const materials = {
   update,
   getById,
   deleteById,
   getAll,
-  insert
+  create
 };
 
-export { materialDb };
+export { materials };

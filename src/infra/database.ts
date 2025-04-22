@@ -17,9 +17,7 @@ async function query(query: SQLWrapper | string) {
   return rows[0];
 }
 
-const database = {
+export const database = {
   query,
   client
 };
-
-export { database };
