@@ -1,7 +1,7 @@
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { eq } from 'drizzle-orm';
-import { database } from '../database';
-import { materialsTable } from '../schemas/materials';
+import { database } from '../../infra/database';
+import { materialsTable } from '../../infra/schemas/materials';
 
 async function create(material: MaterialInsert) {
   await database.client.insert(materialsTable).values(material);

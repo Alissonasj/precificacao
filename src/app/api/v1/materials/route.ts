@@ -1,4 +1,4 @@
-import { materials } from '@/infra/queries/materials';
+import { materials } from '@/app/models/materials';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
 
