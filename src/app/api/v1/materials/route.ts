@@ -1,48 +1,38 @@
-import { materials } from '@/app/models/materials';
+import { material } from '@/app/models/material';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
-  const searchParamsId = url.searchParams.get('id');
+  const searchParams = url.searchParams.get('materialName');
 
-  if (searchParamsId) {
-    const materialResult = await materials.getById(searchParamsId);
+  if (searchParams) {
+    const materialFound = await material.findOneByName(searchParams);
 
-    return NextResponse.json(materialResult);
+    return NextResponse.json(materialFound);
   }
 
-  const materialsResult = await materials.getAll();
+  const materialsFound = await material.findAll();
 
-  return Response.json(materialsResult);
+  return NextResponse.json(materialsFound);
 }
 
 export async function POST(request: NextRequest) {
   const requestData: MaterialInsert = await request.json();
-  const material = {
-    material: requestData.material,
-    materialGroup: requestData.materialGroup,
-    price: requestData.price
-  };
 
-  await materials.create(material);
+  const createdMaterial = await material.create(requestData);
 
-  return NextResponse.json(material);
+  return new NextResponse(JSON.stringify(createdMaterial), { status: 201 });
 }
 
 export async function PUT(request: NextRequest) {
   const requestData: MaterialSelect = await request.json();
-  const material = {
-    id: requestData.id,
-    material: requestData.material,
-    materialGroup: requestData.materialGroup,
-    price: requestData.price,
-    baseWidth: requestData.baseWidth,
-    createdAt: requestData.createdAt,
+  const updatedMaterial = {
+    ...requestData,
     updatedAt: new Date()
   };
 
-  await materials.update(material);
+  await material.update(updatedMaterial);
 
   return NextResponse.json(material);
 }
@@ -50,7 +40,7 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   const requestData: Pick<MaterialSelect, 'id'> = await request.json();
 
-  await materials.deleteById(requestData.id);
+  await material.deleteById(requestData.id);
 
   return NextResponse.json(requestData.id);
 }

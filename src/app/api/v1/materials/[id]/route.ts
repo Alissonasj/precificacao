@@ -1,10 +1,10 @@
-import { materials } from '@/app/models/materials';
+import { material } from '@/app/models/material';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');
-  const material = await materials.getById(finalUrl);
+  const materialFound = await material.findOneById(finalUrl);
 
-  return NextResponse.json(material);
+  return NextResponse.json(materialFound);
 }

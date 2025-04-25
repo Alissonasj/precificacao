@@ -1,19 +1,33 @@
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { eq } from 'drizzle-orm';
 import { database } from '../../infra/database';
-import { materialsTable } from '../../infra/schemas/materials';
+import { materialsTable } from '../../infra/schemas/material';
 
 async function create(material: MaterialInsert) {
-  await database.client.insert(materialsTable).values(material);
+  const result = await database.client
+    .insert(materialsTable)
+    .values(material)
+    .returning();
+
+  return result;
 }
 
-async function getAll() {
+async function findAll() {
   const materials = await database.client.select().from(materialsTable);
 
   return materials;
 }
 
-async function getById(id: string) {
+async function findOneByName(materialName: string) {
+  const material = await database.client
+    .select()
+    .from(materialsTable)
+    .where(eq(materialsTable.materialName, materialName));
+
+  return material[0];
+}
+
+async function findOneById(id: string) {
   const material = await database.client
     .select()
     .from(materialsTable)
@@ -26,7 +40,7 @@ async function update(material: MaterialSelect) {
   await database.client
     .update(materialsTable)
     .set({
-      material: material.material,
+      materialName: material.materialName,
       materialGroup: material.materialGroup,
       price: material.price,
       baseWidth: material.baseWidth,
@@ -40,12 +54,13 @@ async function deleteById(id: string) {
   await database.client.delete(materialsTable).where(eq(materialsTable.id, id));
 }
 
-const materials = {
+const material = {
   update,
-  getById,
+  findOneByName,
+  findOneById,
   deleteById,
-  getAll,
+  findAll,
   create
 };
 
-export { materials };
+export { material };
