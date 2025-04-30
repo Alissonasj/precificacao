@@ -1,5 +1,5 @@
-import { exec } from 'child_process';
 import { sql } from 'drizzle-orm';
+import { spawn } from 'node:child_process';
 import { database } from '../src/infra/database';
 
 async function truncateTable(table: string) {
@@ -7,18 +7,18 @@ async function truncateTable(table: string) {
 }
 
 async function runDrizzleKitPush() {
-  exec('npx drizzle-kit push', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Erro ao executar drizzle push: ${error.message}`);
-      return;
-    }
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn('npm', ['run', 'drizzle:push'], {
+      stdio: 'overlapped',
+      shell: true
+    });
 
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return;
-    }
+    child.on('close', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error(`drizzle:push exited with code ${code}`));
+    });
 
-    console.log(`stdout: ${stdout}`);
+    child.on('error', reject);
   });
 }
 
