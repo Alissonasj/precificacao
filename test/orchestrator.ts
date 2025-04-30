@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { spawn } from 'node:child_process';
-import { database } from '../src/infra/database';
+import { database } from '../src/app/(backend)/infra/database';
 
 async function truncateTable(table: string) {
   await database.query(sql.raw(`TRUNCATE TABLE ${table}`));

@@ -1,5 +1,5 @@
-import material from '@/app/models/material';
-import { deleteHandler, errorHandler } from '@/infra/controller';
+import { deleteHandler, errorHandler } from '@/app/(backend)/infra/controller';
+import material from '@/app/(backend)/models/material';
 import { MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
 

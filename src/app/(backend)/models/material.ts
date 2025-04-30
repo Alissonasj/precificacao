@@ -1,6 +1,6 @@
-import { database } from '@/infra/database';
-import { NotFoundError, ValidationError } from '@/infra/erros';
-import { materialsTable } from '@/infra/schemas/material';
+import { database } from '@/app/(backend)/infra/database';
+import { NotFoundError, ValidationError } from '@/app/(backend)/infra/erros';
+import { materialsTable } from '@/app/(backend)/infra/schemas/material';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { eq, sql } from 'drizzle-orm';
 

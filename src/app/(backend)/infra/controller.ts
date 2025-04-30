@@ -1,4 +1,4 @@
-import material from '@/app/models/material';
+import material from '@/app/(backend)/models/material';
 import { NextResponse } from 'next/server';
 import { InternalServerError, NotFoundError, ValidationError } from './erros';
 
