@@ -1,66 +1,126 @@
+import { database } from '@/infra/database';
+import { NotFoundError, ValidationError } from '@/infra/erros';
+import { materialsTable } from '@/infra/schemas/material';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
-import { eq } from 'drizzle-orm';
-import { database } from '../../infra/database';
-import { materialsTable } from '../../infra/schemas/material';
+import { eq, sql } from 'drizzle-orm';
 
 async function create(material: MaterialInsert) {
-  const result = await database.client
-    .insert(materialsTable)
-    .values(material)
-    .returning();
+  try {
+    const createdMaterial = await database.client
+      .insert(materialsTable)
+      .values(material)
+      .returning();
 
-  return result;
+    return { data: createdMaterial[0], message: 'O Material foi cadastrado.' };
+  } catch (error) {
+    throw new ValidationError({ cause: error });
+  }
 }
 
 async function findAll() {
-  const materials = await database.client.select().from(materialsTable);
+  const allMaterials = await database.client.select().from(materialsTable);
 
-  return materials;
+  return allMaterials;
 }
 
-async function findOneByName(materialName: string) {
-  const material = await database.client
+async function findByMaterialName(materialName: string) {
+  const materialsFound = await database.client
     .select()
     .from(materialsTable)
-    .where(eq(materialsTable.materialName, materialName));
+    .where(
+      eq(sql`LOWER(${materialsTable.materialName})`, materialName.toLowerCase())
+    );
 
-  return material[0];
+  if (materialsFound.length === 0) {
+    return {
+      data: materialsFound,
+      message: 'Material não encontrado.'
+    };
+  }
+
+  return { data: materialsFound, message: '' };
 }
 
+//Ao tentar acessar uma URL dinâmica do objeto que foi deletado do banco de dados, o erro lançado é 500 e nao 404 como está no código. Porque? Existe algum tipo de cash?
 async function findOneById(id: string) {
-  const material = await database.client
-    .select()
-    .from(materialsTable)
-    .where(eq(materialsTable.id, id));
+  try {
+    const materialFound = await database.client
+      .select()
+      .from(materialsTable)
+      .where(eq(materialsTable.id, id));
 
-  return material[0];
+    return materialFound[0];
+  } catch (error) {
+    throw new NotFoundError({ message: 'Id não encontrado.', cause: error });
+  }
 }
 
-async function update(material: MaterialSelect) {
-  await database.client
+async function update(materialUpdated: MaterialSelect) {
+  const materialRegistered = await findOneById(materialUpdated.id);
+
+  const keysToCompare = [
+    'materialName',
+    'materialGroup',
+    'price',
+    'baseWidth'
+  ] as const;
+
+  const areEqual = compareObjectsByKeys(
+    materialUpdated,
+    materialRegistered,
+    keysToCompare
+  );
+
+  if (areEqual) {
+    return { data: {}, message: 'Nenhuma alteração a ser feita.' };
+  }
+
+  const result = await database.client
     .update(materialsTable)
     .set({
-      materialName: material.materialName,
-      materialGroup: material.materialGroup,
-      price: material.price,
-      baseWidth: material.baseWidth,
-      createdAt: material.createdAt,
-      updatedAt: material.updatedAt
+      materialName: materialUpdated.materialName,
+      materialGroup: materialUpdated.materialGroup,
+      price: materialUpdated.price,
+      baseWidth: materialUpdated.baseWidth,
+      createdAt: materialUpdated.createdAt,
+      updatedAt: sql`NOW()`
     })
-    .where(eq(materialsTable.id, material.id));
+    .where(eq(materialsTable.id, materialUpdated.id))
+    .returning();
+
+  return { data: result[0], message: '' };
+
+  function compareObjectsByKeys<T>(
+    object1: T,
+    object2: T,
+    keysToCompare: readonly (keyof T)[]
+  ): boolean {
+    return keysToCompare.every((key) => object1[key] === object2[key]);
+  }
 }
 
 async function deleteById(id: string) {
-  await database.client.delete(materialsTable).where(eq(materialsTable.id, id));
+  try {
+    const deletedMaterial = await database.client
+      .delete(materialsTable)
+      .where(eq(materialsTable.id, id))
+      .returning();
+    return { data: deletedMaterial[0], message: 'O material foi deletado.' };
+  } catch (error) {
+    throw new NotFoundError({
+      message: 'O material não foi deletado.',
+      cause: error
+    });
+  }
 }
 
 const material = {
   update,
-  findOneByName,
+  findByMaterialName,
   findOneById,
   deleteById,
   findAll,
   create
 };
 
-export { material };
+export default material;

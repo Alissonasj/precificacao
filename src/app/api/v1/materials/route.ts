@@ -1,5 +1,6 @@
-import { material } from '@/app/models/material';
-import { MaterialInsert, MaterialSelect } from '@/types/material';
+import material from '@/app/models/material';
+import { deleteHandler, errorHandler } from '@/infra/controller';
+import { MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -7,9 +8,9 @@ export async function GET(request: NextRequest) {
   const searchParams = url.searchParams.get('materialName');
 
   if (searchParams) {
-    const materialFound = await material.findOneByName(searchParams);
+    const materialsFound = await material.findByMaterialName(searchParams);
 
-    return NextResponse.json(materialFound);
+    return NextResponse.json(materialsFound);
   }
 
   const materialsFound = await material.findAll();
@@ -18,29 +19,17 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const requestData: MaterialInsert = await request.json();
+  try {
+    const requestData = await request.json();
+    const createdMaterial = await material.create(requestData);
 
-  const createdMaterial = await material.create(requestData);
-
-  return new NextResponse(JSON.stringify(createdMaterial), { status: 201 });
-}
-
-export async function PUT(request: NextRequest) {
-  const requestData: MaterialSelect = await request.json();
-  const updatedMaterial = {
-    ...requestData,
-    updatedAt: new Date()
-  };
-
-  await material.update(updatedMaterial);
-
-  return NextResponse.json(material);
+    return NextResponse.json(createdMaterial, { status: 201 });
+  } catch (error) {
+    return errorHandler(error);
+  }
 }
 
 export async function DELETE(request: NextRequest) {
   const requestData: Pick<MaterialSelect, 'id'> = await request.json();
-
-  await material.deleteById(requestData.id);
-
-  return NextResponse.json(requestData.id);
+  return deleteHandler(requestData.id);
 }
