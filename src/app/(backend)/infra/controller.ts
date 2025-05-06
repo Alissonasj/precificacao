@@ -1,4 +1,3 @@
-import material from '@/app/(backend)/models/material';
 import { NextResponse } from 'next/server';
 import { InternalServerError, NotFoundError, ValidationError } from './erros';
 
@@ -17,14 +16,4 @@ export function errorHandler(error: unknown) {
   return NextResponse.json(publicErrorObject, {
     status: publicErrorObject.statusCode
   });
-}
-
-export async function deleteHandler(id: string) {
-  try {
-    const deletedMaterial = await material.deleteById(id);
-
-    return NextResponse.json(deletedMaterial);
-  } catch (error) {
-    return errorHandler(error);
-  }
 }

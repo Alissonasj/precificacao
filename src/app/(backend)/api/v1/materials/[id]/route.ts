@@ -1,4 +1,4 @@
-import { deleteHandler, errorHandler } from '@/app/(backend)/infra/controller';
+import { errorHandler } from '@/app/(backend)/infra/controller';
 import material from '@/app/(backend)/models/material';
 import { MaterialSelect } from '@/types/material';
 import { NextRequest, NextResponse } from 'next/server';
@@ -32,6 +32,12 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const requestData: Pick<MaterialSelect, 'id'> = await request.json();
-  return deleteHandler(requestData.id);
+  try {
+    const requestData = await request.json();
+    const deletedMaterial = await material.deleteById(requestData);
+
+    return NextResponse.json(deletedMaterial);
+  } catch (error) {
+    return errorHandler(error);
+  }
 }

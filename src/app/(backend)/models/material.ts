@@ -27,9 +27,7 @@ async function findByMaterialName(materialName: string) {
   const materialsFound = await database.client
     .select()
     .from(materialsTable)
-    .where(
-      eq(sql`LOWER(${materialsTable.materialName})`, materialName.toLowerCase())
-    );
+    .where(eq(sql`LOWER(${materialsTable.name})`, materialName.toLowerCase()));
 
   if (materialsFound.length === 0) {
     return {
@@ -41,7 +39,6 @@ async function findByMaterialName(materialName: string) {
   return { data: materialsFound, message: '' };
 }
 
-//Ao tentar acessar uma URL dinâmica do objeto que foi deletado do banco de dados, o erro lançado é 500 e nao 404 como está no código. Porque? Existe algum tipo de cash?
 async function findOneById(id: string) {
   try {
     const materialFound = await database.client
@@ -58,12 +55,7 @@ async function findOneById(id: string) {
 async function update(materialUpdated: MaterialSelect) {
   const materialRegistered = await findOneById(materialUpdated.id);
 
-  const keysToCompare = [
-    'materialName',
-    'materialGroup',
-    'price',
-    'baseWidth'
-  ] as const;
+  const keysToCompare = ['name', 'price', 'baseWidth', 'groupId'] as const;
 
   const areEqual = compareObjectsByKeys(
     materialUpdated,
@@ -78,11 +70,8 @@ async function update(materialUpdated: MaterialSelect) {
   const result = await database.client
     .update(materialsTable)
     .set({
-      materialName: materialUpdated.materialName,
-      materialGroup: materialUpdated.materialGroup,
-      price: materialUpdated.price,
-      baseWidth: materialUpdated.baseWidth,
-      createdAt: materialUpdated.createdAt,
+      ...materialUpdated,
+      id: '',
       updatedAt: sql`NOW()`
     })
     .where(eq(materialsTable.id, materialUpdated.id))
@@ -99,7 +88,7 @@ async function update(materialUpdated: MaterialSelect) {
   }
 }
 
-async function deleteById(id: string) {
+async function deleteById({ id }: { id: string }) {
   try {
     const deletedMaterial = await database.client
       .delete(materialsTable)
