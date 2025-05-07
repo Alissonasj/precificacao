@@ -1,7 +1,12 @@
 'use client';
 
 import { createMaterialGroupAction } from '@/actions';
-import { Button } from '@/components/ui/button';
+import {
+  materialGroupFormSchema,
+  MaterialGroupFormSchema
+} from '@/types/material';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from '@/components/ui/dialog';
+} from '@ui/dialog';
 import {
   Form,
   FormControl,
@@ -17,13 +22,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import {
-  materialGroupFormSchema,
-  MaterialGroupFormSchema
-} from '@/types/material';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from '@ui/form';
+import { Input } from '@ui/input';
 import { PlusCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 

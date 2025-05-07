@@ -1,6 +1,7 @@
 'use client';
-import MaterialForm from '@/components/material-form';
+
 import { MaterialSelect } from '@/types/material';
+import MaterialForm from '@components/material-form';
 import { useEffect, useState } from 'react';
 
 export default function Home() {

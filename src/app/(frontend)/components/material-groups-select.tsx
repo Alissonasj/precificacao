@@ -1,5 +1,7 @@
 'use client';
 
+import { MaterialGroupSelect } from '@/types/material';
+import { FormControl } from '@ui/form';
 import {
   Select,
   SelectContent,
@@ -7,10 +9,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/ui/select';
-import { MaterialGroupSelect } from '@/types/material';
+} from '@ui/select';
 import { useEffect, useState } from 'react';
-import { FormControl } from './ui/form';
 
 type MaterialGroupsSelectProps = {
   onValueChange: (value: string) => void;

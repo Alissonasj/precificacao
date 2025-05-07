@@ -1,7 +1,9 @@
 'use client';
 
 import { createMaterialAction } from '@/actions';
-import { Button } from '@/components/ui/button';
+import { materialFormSchema, MaterialFormSchema } from '@/types/material';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@ui/button';
 import {
   Form,
   FormControl,
@@ -9,10 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { materialFormSchema, MaterialFormSchema } from '@/types/material';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from '@ui/form';
+import { Input } from '@ui/input';
 import { useForm } from 'react-hook-form';
 import MaterialDialog from './material-dialog';
 import { MaterialGroupsSelect } from './material-groups-select';
