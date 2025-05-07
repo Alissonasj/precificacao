@@ -1,5 +1,5 @@
 import { database } from '@/app/(backend)/infra/database';
-import { NotFoundError, ValidationError } from '@/app/(backend)/infra/erros';
+import { NotFoundError, ValidationError } from '@/app/(backend)/infra/errors';
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
 import { eq, sql } from 'drizzle-orm';
@@ -55,7 +55,7 @@ async function findOneById(id: string) {
 async function update(materialUpdated: MaterialSelect) {
   const materialRegistered = await findOneById(materialUpdated.id);
 
-  const keysToCompare = ['name', 'price', 'baseWidth', 'groupId'] as const;
+  const keysToCompare = ['name', 'price', 'baseWidth', 'group'] as const;
 
   const areEqual = compareObjectsByKeys(
     materialUpdated,

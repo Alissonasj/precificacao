@@ -22,6 +22,10 @@
     "paths": {
       "@ui/*": ["./src/app/(frontend)/components/ui/*"],
       "@components/*": ["./src/app/(frontend)/components/*"],
+      "@db_schemas/*": ["./src/app/(backend)/infra/schemas/*"],
+      "@frontend/*": ["./src/app/(frontend)/*"],
+      "@backend/*": ["./src/app/(backend)/*"],
+      "@types/*": ["./src/types/*"],
       "@/*": ["./src/*"]
     }
   },
