@@ -11,7 +11,7 @@ export const materialsTable = pgTable('materials', {
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
-  group: text('material_group')
+  fkGroup: text('fk_group')
     .references(() => materialGroupsTable.group)
     .notNull()
 });

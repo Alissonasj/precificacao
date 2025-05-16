@@ -1,4 +1,4 @@
-import { database } from '@/app/(backend)/infra/database';
+import { database } from '@backend/infra/database';
 import { sql } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 

@@ -25,7 +25,6 @@
       "@db_schemas/*": ["./src/app/(backend)/infra/schemas/*"],
       "@frontend/*": ["./src/app/(frontend)/*"],
       "@backend/*": ["./src/app/(backend)/*"],
-      "@types/*": ["./src/types/*"],
       "@/*": ["./src/*"]
     }
   },

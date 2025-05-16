@@ -26,7 +26,7 @@ export default function Home() {
                 <li>Largura Base: {m.baseWidth} cm</li>
                 <li>Criado em: {m.createdAt.toString()}</li>
                 <li>Atualizado em: {m.updatedAt.toString()}</li>
-                <li>Grupo: {m.group}</li>
+                <li>Grupo: {m.fkGroup}</li>
               </div>
             );
           })}

@@ -1,14 +1,14 @@
-import { database } from '@/app/(backend)/infra/database';
-import { NotFoundError, ValidationError } from '@/app/(backend)/infra/errors';
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
 import { MaterialInsert, MaterialSelect } from '@/types/material';
+import { database } from '@backend/infra/database';
+import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { eq, sql } from 'drizzle-orm';
 
-async function create(material: MaterialInsert) {
+async function create(materialInputValues: MaterialInsert) {
   try {
     const createdMaterial = await database.client
       .insert(materialsTable)
-      .values(material)
+      .values(materialInputValues)
       .returning();
 
     return { data: createdMaterial[0], message: 'O Material foi cadastrado.' };
@@ -48,18 +48,18 @@ async function findOneById(id: string) {
 
     return materialFound[0];
   } catch (error) {
-    throw new NotFoundError({ message: 'Id não encontrado.', cause: error });
+    throw new NotFoundError({ message: 'ID não encontrado.', cause: error });
   }
 }
 
-async function update(materialUpdated: MaterialSelect) {
-  const materialRegistered = await findOneById(materialUpdated.id);
+async function update(updatedMaterialInputValues: MaterialSelect) {
+  const registeredMaterial = await findOneById(updatedMaterialInputValues.id);
 
-  const keysToCompare = ['name', 'price', 'baseWidth', 'group'] as const;
+  const keysToCompare = ['name', 'price', 'baseWidth', 'fkGroup'] as const;
 
   const areEqual = compareObjectsByKeys(
-    materialUpdated,
-    materialRegistered,
+    updatedMaterialInputValues,
+    registeredMaterial,
     keysToCompare
   );
 
@@ -70,15 +70,15 @@ async function update(materialUpdated: MaterialSelect) {
   const result = await database.client
     .update(materialsTable)
     .set({
-      ...materialUpdated,
-      id: '',
+      ...updatedMaterialInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(materialsTable.id, materialUpdated.id))
+    .where(eq(materialsTable.id, updatedMaterialInputValues.id))
     .returning();
 
   return { data: result[0], message: '' };
 
+  // Está se repetindo entre os models
   function compareObjectsByKeys<T>(
     object1: T,
     object2: T,
@@ -94,10 +94,10 @@ async function deleteById({ id }: { id: string }) {
       .delete(materialsTable)
       .where(eq(materialsTable.id, id))
       .returning();
-    return { data: deletedMaterial[0], message: 'O material foi deletado.' };
+    return { data: deletedMaterial[0], message: 'O Material foi deletado.' };
   } catch (error) {
     throw new NotFoundError({
-      message: 'O material não foi deletado.',
+      message: 'O Material não pode ser deletado.',
       cause: error
     });
   }

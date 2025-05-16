@@ -1,9 +1,7 @@
-import { errorHandler } from '@/app/(backend)/infra/controller';
-import material from '@/app/(backend)/models/material';
 import { MaterialSelect } from '@/types/material';
+import { errorHandler } from '@backend/infra/controller';
+import material from '@backend/models/material';
 import { NextRequest, NextResponse } from 'next/server';
-
-//Ao tentar acessar uma URL dinâmica do objeto que foi deletado do banco de dados, o erro lançado é 500 e nao 404 como está no código. Porque? Existe algum tipo de cash?
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');
@@ -21,20 +19,23 @@ export async function PUT(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');
   const requestData: MaterialSelect = await request.json();
-  const materialValues = {
+  const updatedMaterialInputValues = {
     ...requestData,
     id: finalUrl
   };
 
-  const updatedMaterial = await material.update(materialValues);
+  const updatedMaterial = await material.update(updatedMaterialInputValues);
 
   return NextResponse.json(updatedMaterial);
 }
 
 export async function DELETE(request: NextRequest) {
+  //Melhor passar o ID no corpo da request ou deletar direto pegando da URL?
+  const url = request.nextUrl;
+  const finalUrl = url.pathname.replace('/api/v1/materials/', '');
+
   try {
-    const requestData = await request.json();
-    const deletedMaterial = await material.deleteById(requestData);
+    const deletedMaterial = await material.deleteById({ id: finalUrl });
 
     return NextResponse.json(deletedMaterial);
   } catch (error) {
