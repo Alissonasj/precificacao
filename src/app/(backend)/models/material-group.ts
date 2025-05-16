@@ -1,9 +1,11 @@
-import { eq } from 'drizzle-orm';
-import { database } from '../infra/database';
-import { NotFoundError, ValidationError } from '../infra/erros';
-import { materialGroupsTable } from '../infra/schemas/material';
+import { database } from '@backend/infra/database';
+import { NotFoundError, ValidationError } from '@backend/infra/errors';
+import { materialGroupsTable } from '@db_schemas/material';
+import { eq, sql } from 'drizzle-orm';
 
 async function create({ group }: { group: string }) {
+  await validateUniqueGroup(group);
+
   try {
     const createdGroup = await database.client
       .insert(materialGroupsTable)
@@ -14,12 +16,37 @@ async function create({ group }: { group: string }) {
   } catch (error) {
     throw new ValidationError({ cause: error });
   }
+
+  async function validateUniqueGroup(group: string) {
+    const { data } = await findByGroup(group);
+    if (data)
+      throw new ValidationError({
+        message: 'O grupo informado já foi cadastrado.',
+        action: 'Utilize ou grupo para cadastrar.'
+      });
+  }
 }
 
 async function findAll() {
   const allGroups = await database.client.select().from(materialGroupsTable);
 
   return allGroups;
+}
+
+async function findByGroup(group: string) {
+  const gorupFound = await database.client
+    .select()
+    .from(materialGroupsTable)
+    .where(eq(sql`LOWER(${materialGroupsTable.group})`, group.toLowerCase()));
+
+  if (gorupFound.length === 0) {
+    return {
+      data: gorupFound[0],
+      message: 'Material não encontrado.'
+    };
+  }
+
+  return { data: gorupFound, message: '' };
 }
 
 async function deleteById({ id }: { id: string }) {
@@ -41,6 +68,7 @@ async function deleteById({ id }: { id: string }) {
 const materialGroup = {
   create,
   findAll,
+  findByGroup,
   deleteById
 };
 
