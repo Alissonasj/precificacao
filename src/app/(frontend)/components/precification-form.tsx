@@ -1,25 +1,16 @@
 'use client';
 
-import { MaterialSelect } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
-import { Form, FormControl, FormField, FormItem } from '@ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@ui/select';
-import { useEffect, useState } from 'react';
+import { Form, FormField, FormItem } from '@ui/form';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import MaterialsSelect from './material-select';
 
 const formSchema = z.object({
   material: z.array(
     z.object({
-      name: z.string()
+      name: z.string().min(1)
     })
   )
 });
@@ -27,7 +18,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function PrecificationForm() {
-  const [materialOptions, setMaterialsOptions] = useState<MaterialSelect[]>([]);
   const hookForm = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,12 +28,6 @@ export default function PrecificationForm() {
     name: 'material',
     control: hookForm.control
   });
-
-  useEffect(() => {
-    fetch('http://localhost:3000/api/v1/materials')
-      .then((response) => response.json())
-      .then((data: MaterialSelect[]) => setMaterialsOptions(data));
-  }, []);
 
   function onSubmit(data: FormData) {
     console.log(data);
@@ -60,31 +44,10 @@ export default function PrecificationForm() {
                 name={`material.${index}.name`}
                 render={({ field }) => (
                   <FormItem>
-                    <Select
+                    <MaterialsSelect
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className='w-180px'>
-                          <SelectValue placeholder='Escolha o material' />
-                        </SelectTrigger>
-                      </FormControl>
-
-                      <SelectContent>
-                        <SelectGroup>
-                          {materialOptions?.map((material) => {
-                            return (
-                              <SelectItem
-                                key={material.id}
-                                value={material.name}
-                              >
-                                {material.name}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                    />
                   </FormItem>
                 )}
               />
