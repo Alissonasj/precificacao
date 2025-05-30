@@ -1,3 +1,4 @@
+import { compareObjectsByKeys } from '@/lib/utils';
 import { BagInsert, BagSelect } from '@/types/bag';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
@@ -77,15 +78,6 @@ async function update(updatedBagInputValues: BagSelect) {
     .returning();
 
   return { data: result[0], message: '' };
-
-  // Está se repetindo entre os models
-  function compareObjectsByKeys<T>(
-    object1: T,
-    object2: T,
-    keysToCompare: readonly (keyof T)[]
-  ): boolean {
-    return keysToCompare.every((key) => object1[key] === object2[key]);
-  }
 }
 
 async function deleteById({ id }: { id: string }) {
