@@ -1,6 +1,7 @@
 import { errorHandler } from '@backend/infra/controller';
 import material from '@backend/models/material';
 import { NextRequest, NextResponse } from 'next/server';
+
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const searchParams = url.searchParams.get('materialName');

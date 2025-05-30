@@ -1,6 +1,7 @@
 import { errorHandler } from '@backend/infra/controller';
 import materialGroup from '@backend/models/material-group';
 import { NextRequest, NextResponse } from 'next/server';
+
 export async function GET() {
   const materialsFound = await materialGroup.findAll();
 

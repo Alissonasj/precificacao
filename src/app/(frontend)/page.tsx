@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/materials')
       .then((response) => response.json())
-      .then((data: MaterialSelect[]) => setMaterials(data));
+      .then((data) => setMaterials(data));
   }, []);
 
   return (

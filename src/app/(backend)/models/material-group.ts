@@ -19,10 +19,11 @@ async function create({ group }: { group: string }) {
 
   async function validateUniqueGroup(group: string) {
     const { data } = await findByGroup(group);
+
     if (data)
       throw new ValidationError({
         message: 'O grupo informado já foi cadastrado.',
-        action: 'Utilize ou grupo para cadastrar.'
+        action: 'Utilize outro grupo para cadastrar.'
       });
   }
 }
@@ -42,7 +43,7 @@ async function findByGroup(group: string) {
   if (gorupFound.length === 0) {
     return {
       data: gorupFound[0],
-      message: 'Material não encontrado.'
+      message: 'Grupo não encontrado.'
     };
   }
 

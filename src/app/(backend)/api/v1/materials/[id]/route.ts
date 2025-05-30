@@ -2,6 +2,7 @@ import { MaterialSelect } from '@/types/material';
 import { errorHandler } from '@backend/infra/controller';
 import material from '@backend/models/material';
 import { NextRequest, NextResponse } from 'next/server';
+
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');

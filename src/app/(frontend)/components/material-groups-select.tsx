@@ -21,8 +21,9 @@ export function MaterialGroupsSelect({
   onValueChange,
   defaultValue
 }: MaterialGroupsSelectProps) {
-  const [materialsGroups, setMaterialsGroups] =
-    useState<MaterialGroupSelect[]>();
+  const [materialsGroups, setMaterialsGroups] = useState<MaterialGroupSelect[]>(
+    []
+  );
 
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/material-groups')
@@ -40,6 +41,7 @@ export function MaterialGroupsSelect({
           <SelectValue placeholder='Escolha o grupo' />
         </SelectTrigger>
       </FormControl>
+
       <SelectContent>
         <SelectGroup>
           {materialsGroups?.map((g) => {

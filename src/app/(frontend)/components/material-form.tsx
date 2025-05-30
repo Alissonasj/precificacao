@@ -24,14 +24,13 @@ export default function MaterialForm() {
     price: '',
     baseWidth: '0'
   };
-
   const hookForm = useForm<MaterialFormSchema>({
     resolver: zodResolver(materialFormSchema),
     defaultValues
   });
 
-  async function onSubmit(inputValues: MaterialFormSchema) {
-    await createMaterialAction(inputValues);
+  async function onSubmit(materialInputValues: MaterialFormSchema) {
+    await createMaterialAction(materialInputValues);
   }
 
   return (
@@ -66,7 +65,7 @@ export default function MaterialForm() {
           <div className='col-span-4'>
             <FormField
               control={hookForm.control}
-              name='group'
+              name='fkGroup'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Grupo</FormLabel>
@@ -103,6 +102,7 @@ export default function MaterialForm() {
             />
           </div>
         </div>
+
         <div className='grid grid-cols-12 gap-4'>
           <div className='col-span-4'>
             <FormField

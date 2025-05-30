@@ -58,9 +58,8 @@ function MaterialGroupForm() {
     }
   });
 
-  async function onSubmit(inputValue: MaterialGroupFormSchema) {
-    const result = await createMaterialGroupAction(inputValue);
-    console.log(result);
+  async function onSubmit(materialGroupInputValues: MaterialGroupFormSchema) {
+    await createMaterialGroupAction(materialGroupInputValues);
   }
 
   return (
