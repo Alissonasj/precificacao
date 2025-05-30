@@ -1,6 +1,6 @@
 'use client';
 
-import { MaterialGroupSelect } from '@/types/material';
+import { MaterialGroupSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
 import {
   Select,
@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react';
 
 type MaterialGroupsSelectProps = {
-  onValueChange: (value: string) => void;
+  onValueChange?: (value: string) => void;
   defaultValue?: string;
 };
 
@@ -21,14 +21,16 @@ export function MaterialGroupsSelect({
   onValueChange,
   defaultValue
 }: MaterialGroupsSelectProps) {
-  const [materialsGroups, setMaterialsGroups] = useState<MaterialGroupSelect[]>(
-    []
-  );
+  const [materialGroupsOptions, setMaterialGroupsOptions] = useState<
+    MaterialGroupSelectDatabase[]
+  >([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/material-groups')
       .then((response) => response.json())
-      .then((data: MaterialGroupSelect[]) => setMaterialsGroups(data));
+      .then((data: MaterialGroupSelectDatabase[]) =>
+        setMaterialGroupsOptions(data)
+      );
   }, []);
 
   return (
@@ -44,13 +46,13 @@ export function MaterialGroupsSelect({
 
       <SelectContent>
         <SelectGroup>
-          {materialsGroups?.map((g) => {
+          {materialGroupsOptions?.map((group) => {
             return (
               <SelectItem
-                key={g.id}
-                value={g.group}
+                key={group.id}
+                value={group.group}
               >
-                {g.group}
+                {group.group}
               </SelectItem>
             );
           })}

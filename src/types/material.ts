@@ -4,8 +4,8 @@ import {
 } from '@/app/(backend)/infra/schemas/material';
 import * as z from 'zod';
 
-export type MaterialInsert = typeof materialsTable.$inferInsert;
-export type MaterialSelect = typeof materialsTable.$inferSelect;
+export type MaterialInsertDatabase = typeof materialsTable.$inferInsert;
+export type MaterialSelectDatabase = typeof materialsTable.$inferSelect;
 export const materialFormSchema = z.object({
   name: z.string().min(1, { message: 'Campo obrigatório.' }),
   baseWidth: z.string().optional(),
@@ -14,8 +14,10 @@ export const materialFormSchema = z.object({
 });
 export type MaterialFormSchema = z.infer<typeof materialFormSchema>;
 
-export type MaterialGroupInsert = typeof materialGroupsTable.$inferInsert;
-export type MaterialGroupSelect = typeof materialGroupsTable.$inferSelect;
+export type MaterialGroupInsertDatabase =
+  typeof materialGroupsTable.$inferInsert;
+export type MaterialGroupSelectDatabase =
+  typeof materialGroupsTable.$inferSelect;
 export const materialGroupFormSchema = z.object({
   group: z.string().min(1, { message: 'Campo obrigatório.' })
 });

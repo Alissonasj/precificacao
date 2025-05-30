@@ -1,8 +1,8 @@
-import { PrecificationInsert } from '@/types/precification';
+import { PrecificationInsertDatabase } from '@/types/precification';
 import { database } from '@backend/infra/database';
 import { precificationsTable } from '@db_schemas/precification';
 
-async function create(bagMaterialsInpuntValues: PrecificationInsert[]) {
+async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
   try {
     const createdPrevificatrion = await database.client
       .insert(precificationsTable)

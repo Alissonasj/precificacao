@@ -1,11 +1,11 @@
 'use client';
 
-import { MaterialSelect } from '@/types/material';
+import { MaterialSelectDatabase } from '@/types/material';
 import MaterialForm from '@components/material-form';
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-  const [materials, setMaterials] = useState<MaterialSelect[]>();
+  const [materials, setMaterials] = useState<MaterialSelectDatabase[]>();
 
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/materials')

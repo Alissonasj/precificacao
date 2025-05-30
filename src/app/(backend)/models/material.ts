@@ -1,11 +1,14 @@
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
 import { compareObjectsByKeys } from '@/lib/utils';
-import { MaterialInsert, MaterialSelect } from '@/types/material';
+import {
+  MaterialInsertDatabase,
+  MaterialSelectDatabase
+} from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { eq, sql } from 'drizzle-orm';
 
-async function create(materialInputValues: MaterialInsert) {
+async function create(materialInputValues: MaterialInsertDatabase) {
   try {
     const createdMaterial = await database.client
       .insert(materialsTable)
@@ -53,7 +56,7 @@ async function findOneById(id: string) {
   }
 }
 
-async function update(updatedMaterialInputValues: MaterialSelect) {
+async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
   const registeredMaterial = await findOneById(updatedMaterialInputValues.id);
 
   const keysToCompare = ['name', 'price', 'baseWidth', 'fkGroup'] as const;

@@ -1,10 +1,10 @@
 'use client';
-import { BagSelect } from '@/types/bag';
+import { BagSelectDatabase } from '@/types/bag';
 import BagForm from '@components/bag-form';
 import { useEffect, useState } from 'react';
 
 export default function Bags() {
-  const [bags, setBags] = useState<BagSelect[]>([]);
+  const [bags, setBags] = useState<BagSelectDatabase[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/v1/bags')

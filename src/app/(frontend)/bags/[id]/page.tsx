@@ -1,5 +1,5 @@
 import { getOneBagAction } from '@/actions';
-import { BagSelect } from '@/types/bag';
+import { BagSelectDatabase } from '@/types/bag';
 import PrecificationForm from '@components/precification-form';
 
 type BagDetailsProps = {
@@ -8,7 +8,7 @@ type BagDetailsProps = {
 
 export default async function BagDetails({ params }: BagDetailsProps) {
   const { id } = await params;
-  const bag: BagSelect = await getOneBagAction(id);
+  const bag: BagSelectDatabase = await getOneBagAction(id);
 
   return (
     <>

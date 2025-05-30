@@ -1,11 +1,11 @@
 import { compareObjectsByKeys } from '@/lib/utils';
-import { BagInsert, BagSelect } from '@/types/bag';
+import { BagInsertDatabase, BagSelectDatabase } from '@/types/bag';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { bagsTable } from '@db_schemas/bag';
 import { eq, sql } from 'drizzle-orm';
 
-async function create(bagInputValues: BagInsert) {
+async function create(bagInputValues: BagInsertDatabase) {
   try {
     const createdBag = await database.client
       .insert(bagsTable)
@@ -53,7 +53,7 @@ async function findOneById(id: string) {
   }
 }
 
-async function update(updatedBagInputValues: BagSelect) {
+async function update(updatedBagInputValues: BagSelectDatabase) {
   const registeredBag = await findOneById(updatedBagInputValues.id);
 
   const keysToCompare = ['name', 'price', 'hoursWorked'] as const;
