@@ -1,14 +1,17 @@
 'use server';
 
-import { MaterialFormSchema } from './types/material';
+import { BagFormSchema } from './types/bag';
+import { MaterialFormSchema, MaterialGroupFormSchema } from './types/material';
 
-export async function createMaterialAction(values: MaterialFormSchema) {
+export async function createMaterialAction(
+  materialInputValues: MaterialFormSchema
+) {
   const response = await fetch('http://localhost:3000/api/v1/materials', {
     method: 'POST',
     body: JSON.stringify({
-      ...values,
-      baseWidth: Number(values.baseWidth),
-      price: Number(values.price)
+      ...materialInputValues,
+      baseWidth: Number(materialInputValues.baseWidth),
+      price: Number(materialInputValues.price)
     })
   });
 
@@ -17,10 +20,12 @@ export async function createMaterialAction(values: MaterialFormSchema) {
   return responseData;
 }
 
-export async function createMaterialGroupAction({ group }: { group: string }) {
+export async function createMaterialGroupAction(
+  materialGroupInputValues: MaterialGroupFormSchema
+) {
   const response = await fetch('http://localhost:3000/api/v1/material-groups', {
     method: 'POST',
-    body: JSON.stringify({ group })
+    body: JSON.stringify(materialGroupInputValues)
   });
 
   const responseData = await response.json();
@@ -33,4 +38,26 @@ export async function getAllMaterialAction() {
   const data = await response.json();
 
   return data;
+}
+
+export async function getOneBagAction(id: string) {
+  const response = await fetch(`http://localhost:3000/api/v1/bags/${id}`);
+  const responseData = response.json();
+
+  return responseData;
+}
+
+export async function createBagAction(bagInputValues: BagFormSchema) {
+  const response = await fetch('http://localhost:3000/api/v1/bags', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: bagInputValues.name,
+      price: Number(bagInputValues.price),
+      hoursWorked: Number(bagInputValues.hoursWorked)
+    })
+  });
+
+  const responseData = await response.json();
+
+  return responseData;
 }
