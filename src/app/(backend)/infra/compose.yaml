@@ -6,3 +6,8 @@ services:
       - ../../../../.env.development
     ports:
       - 6543:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
