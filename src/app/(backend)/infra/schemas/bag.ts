@@ -1,8 +1,8 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const bagsTable = pgTable('bags', {
-  id: uuid().defaultRandom().primaryKey(),
-  name: text('name').notNull(),
+  id: uuid().defaultRandom().unique(),
+  name: text('name').primaryKey(),
   price: numeric({ mode: 'number' }),
   hoursWorked: numeric('hours_worked', { mode: 'number' }).notNull(),
   pricingDate: timestamp('pricing_date', { withTimezone: true }),

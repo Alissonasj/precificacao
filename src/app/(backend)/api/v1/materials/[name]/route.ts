@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');
 
   try {
-    const materialFound = await material.findOneById(finalUrl);
+    const materialFound = await material.findByMaterialName(finalUrl);
 
     return NextResponse.json(materialFound);
   } catch (error) {

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const finalUrl = url.pathname.replace('/api/v1/bags/', '');
 
   try {
-    const bagFound = await bag.findOneById(finalUrl);
+    const bagFound = await bag.findByBagName(finalUrl);
 
     return NextResponse.json(bagFound);
   } catch (error) {

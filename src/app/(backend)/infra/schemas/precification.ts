@@ -12,8 +12,8 @@ export const precificationsTable = pgTable('bags_materials', {
   fkBag: uuid('fk_bag')
     .references(() => bagsTable.id)
     .notNull(),
-  fkMaterial: uuid('fk_material')
-    .references(() => materialsTable.id)
+  fkMaterial: text('fk_material')
+    .references(() => materialsTable.name)
     .notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()

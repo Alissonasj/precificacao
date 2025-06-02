@@ -40,9 +40,9 @@ export async function getAllMaterialAction() {
   return data;
 }
 
-export async function getOneBagAction(id: string) {
-  const response = await fetch(`http://localhost:3000/api/v1/bags/${id}`);
-  const responseData = response.json();
+export async function getOneBagAction(bagName: string) {
+  const response = await fetch(`http://localhost:3000/api/v1/bags/${bagName}`);
+  const responseData = await response.json();
 
   return responseData;
 }

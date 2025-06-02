@@ -6,6 +6,8 @@ import { bagsTable } from '@db_schemas/bag';
 import { eq, sql } from 'drizzle-orm';
 
 async function create(bagInputValues: BagInsertDatabase) {
+  await validateUniqueBag(bagInputValues.name);
+
   try {
     const createdBag = await database.client
       .insert(bagsTable)
@@ -15,6 +17,16 @@ async function create(bagInputValues: BagInsertDatabase) {
     return { data: createdBag[0], message: 'A Bolsa foi cadastrada.' };
   } catch (error) {
     throw new ValidationError({ cause: error });
+  }
+
+  async function validateUniqueBag(bagName: string) {
+    const { data } = await findByBagName(bagName);
+
+    if (data.length > 0)
+      throw new ValidationError({
+        message: 'A bolsa informada já foi cadastrada.',
+        action: 'Utilize outro nome para cadastrar.'
+      });
   }
 }
 
@@ -54,13 +66,13 @@ async function findOneById(id: string) {
 }
 
 async function update(updatedBagInputValues: BagSelectDatabase) {
-  const registeredBag = await findOneById(updatedBagInputValues.id);
+  const registeredBag = await findByBagName(updatedBagInputValues.name);
 
   const keysToCompare = ['name', 'price', 'hoursWorked'] as const;
 
   const areEqual = compareObjectsByKeys(
     updatedBagInputValues,
-    registeredBag,
+    registeredBag.data[0],
     keysToCompare
   );
 
@@ -74,7 +86,7 @@ async function update(updatedBagInputValues: BagSelectDatabase) {
       ...updatedBagInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(bagsTable.id, updatedBagInputValues.id))
+    .where(eq(bagsTable.name, updatedBagInputValues.name))
     .returning();
 
   return { data: result[0], message: '' };

@@ -9,6 +9,8 @@ import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { eq, sql } from 'drizzle-orm';
 
 async function create(materialInputValues: MaterialInsertDatabase) {
+  await validateUniqueMaterial(materialInputValues.name);
+
   try {
     const createdMaterial = await database.client
       .insert(materialsTable)
@@ -18,6 +20,17 @@ async function create(materialInputValues: MaterialInsertDatabase) {
     return { data: createdMaterial[0], message: 'O Material foi cadastrado.' };
   } catch (error) {
     throw new ValidationError({ cause: error });
+  }
+
+  async function validateUniqueMaterial(materialName: string) {
+    const { data } = await findByMaterialName(materialName);
+    console.log(data);
+
+    if (data.length > 0)
+      throw new ValidationError({
+        message: 'O material informado já foi cadastrado.',
+        action: 'Utilize outro nome para cadastrar.'
+      });
   }
 }
 
@@ -57,13 +70,15 @@ async function findOneById(id: string) {
 }
 
 async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
-  const registeredMaterial = await findOneById(updatedMaterialInputValues.id);
+  const registeredMaterial = await findByMaterialName(
+    updatedMaterialInputValues.name
+  );
 
   const keysToCompare = ['name', 'price', 'baseWidth', 'fkGroup'] as const;
 
   const areEqual = compareObjectsByKeys(
     updatedMaterialInputValues,
-    registeredMaterial,
+    registeredMaterial.data[0],
     keysToCompare
   );
 
@@ -77,7 +92,7 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
       ...updatedMaterialInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(materialsTable.id, updatedMaterialInputValues.id))
+    .where(eq(materialsTable.name, updatedMaterialInputValues.name))
     .returning();
 
   return { data: result[0], message: '' };

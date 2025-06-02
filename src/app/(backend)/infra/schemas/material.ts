@@ -1,8 +1,8 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const materialsTable = pgTable('materials', {
-  id: uuid().defaultRandom().primaryKey(),
-  name: text('name').notNull(),
+  id: uuid().defaultRandom().unique(),
+  name: text('name').primaryKey(),
   price: numeric({ mode: 'number' }).notNull(),
   baseWidth: numeric('base_width', { mode: 'number' }),
   createdAt: timestamp('created_at', { withTimezone: true })
