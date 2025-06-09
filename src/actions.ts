@@ -44,7 +44,7 @@ export async function getOneBagAction(bagName: string) {
   const response = await fetch(`http://localhost:3000/api/v1/bags/${bagName}`);
   const responseData = await response.json();
 
-  return responseData;
+  return responseData[0];
 }
 
 export async function createBagAction(bagInputValues: BagFormSchema) {

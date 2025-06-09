@@ -30,12 +30,9 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  //Melhor passar o ID no corpo da request ou deletar direto pegando da URL?
-  const url = request.nextUrl;
-  const finalUrl = url.pathname.replace('/api/v1/materials/', '');
-
   try {
-    const deletedMaterial = await material.deleteById(finalUrl);
+    const requestData = await request.json();
+    const deletedMaterial = await material.deleteById(requestData);
 
     return NextResponse.json(deletedMaterial);
   } catch (error) {

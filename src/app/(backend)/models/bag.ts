@@ -14,15 +14,15 @@ async function create(bagInputValues: BagInsertDatabase) {
       .values(bagInputValues)
       .returning();
 
-    return { data: createdBag[0], message: 'A Bolsa foi cadastrada.' };
+    return createdBag[0];
   } catch (error) {
     throw new ValidationError({ cause: error });
   }
 
   async function validateUniqueBag(bagName: string) {
-    const { data } = await findByBagName(bagName);
+    const result = await findByBagName(bagName);
 
-    if (data.length > 0)
+    if (result.length > 0)
       throw new ValidationError({
         message: 'A bolsa informada já foi cadastrada.',
         action: 'Utilize outro nome para cadastrar.'
@@ -37,19 +37,16 @@ async function findAll() {
 }
 
 async function findByBagName(bagName: string) {
-  const bagsFound = await database.client
+  const result = await database.client
     .select()
     .from(bagsTable)
     .where(eq(sql`LOWER(${bagsTable.name})`, bagName.toLowerCase()));
 
-  if (bagsFound.length === 0) {
-    return {
-      data: bagsFound,
-      message: 'Bolsa não encontrada.'
-    };
+  if (result.length === 0) {
+    throw new NotFoundError({ message: 'Bolsa não encontrada.' });
   }
 
-  return { data: bagsFound, message: '' };
+  return result;
 }
 
 async function findOneById(id: string) {
@@ -72,12 +69,12 @@ async function update(updatedBagInputValues: BagSelectDatabase) {
 
   const areEqual = compareObjectsByKeys(
     updatedBagInputValues,
-    registeredBag.data[0],
+    registeredBag[0],
     keysToCompare
   );
 
   if (areEqual) {
-    return { data: {}, message: 'Nenhuma alteração a ser feita.' };
+    return { message: 'Nenhuma alteração a ser feita.' };
   }
 
   const result = await database.client
@@ -89,7 +86,7 @@ async function update(updatedBagInputValues: BagSelectDatabase) {
     .where(eq(bagsTable.name, updatedBagInputValues.name))
     .returning();
 
-  return { data: result[0], message: '' };
+  return result[0];
 }
 
 async function deleteById({ id }: { id: string }) {
@@ -98,7 +95,7 @@ async function deleteById({ id }: { id: string }) {
       .delete(bagsTable)
       .where(eq(bagsTable.id, id))
       .returning();
-    return { data: deletedBag[0], message: 'A Bolsa foi deletada.' };
+    return deletedBag[0];
   } catch (error) {
     throw new NotFoundError({
       message: 'A Bolsa não pode ser deletada.',

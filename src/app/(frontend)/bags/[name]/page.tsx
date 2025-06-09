@@ -7,18 +7,18 @@ type BagDetailsProps = {
 
 export default async function BagDetails({ params }: BagDetailsProps) {
   const { name } = await params;
-  const { data } = await getOneBagAction(name);
+  const data = await getOneBagAction(name);
 
   return (
     <>
       <h1>Detalhes da bolsa</h1>
       <ul>
-        <li>ID: {data[0].id}</li>
-        <li>Nome: {data[0].name}</li>
-        <li>Preço: {data[0].price}</li>
-        <li>Horas trabalhadas: {data[0].hoursWorked}</li>
-        <li>Criada em: {data[0].createdAt.toString()}</li>
-        <li>Atualizando em: {data[0].updatedAt.toString()}</li>
+        <li>ID: {data.id}</li>
+        <li>Nome: {data.name}</li>
+        <li>Preço: {data.price}</li>
+        <li>Horas trabalhadas: {data.hoursWorked}</li>
+        <li>Criada em: {data.createdAt.toString()}</li>
+        <li>Atualizando em: {data.updatedAt.toString()}</li>
       </ul>
 
       <PrecificationForm />
