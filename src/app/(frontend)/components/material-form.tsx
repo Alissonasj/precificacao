@@ -14,7 +14,7 @@ import {
 } from '@ui/form';
 import { Input } from '@ui/input';
 import { useForm } from 'react-hook-form';
-import MaterialDialog from './material-dialog';
+import MaterialDialog from './material-group-dialog';
 import { MaterialGroupsSelect } from './material-groups-select';
 
 export default function MaterialForm() {

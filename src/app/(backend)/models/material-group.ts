@@ -12,15 +12,15 @@ async function create({ group }: { group: string }) {
       .values({ group })
       .returning();
 
-    return { data: createdGroup[0], message: 'O Grupo foi cadastrado.' };
+    return createdGroup[0];
   } catch (error) {
     throw new ValidationError({ cause: error });
   }
 
   async function validateUniqueGroup(group: string) {
-    const { data } = await findByGroup(group);
+    const result = await findByGroup(group);
 
-    if (data)
+    if (result)
       throw new ValidationError({
         message: 'O grupo informado já foi cadastrado.',
         action: 'Utilize outro grupo para cadastrar.'
@@ -35,19 +35,16 @@ async function findAll() {
 }
 
 async function findByGroup(group: string) {
-  const gorupFound = await database.client
+  const result = await database.client
     .select()
     .from(materialGroupsTable)
     .where(eq(sql`LOWER(${materialGroupsTable.group})`, group.toLowerCase()));
 
-  if (gorupFound.length === 0) {
-    return {
-      data: gorupFound[0],
-      message: 'Grupo não encontrado.'
-    };
+  if (result.length === 0) {
+    throw new NotFoundError({ message: 'Grupo não encontrado.' });
   }
 
-  return { data: gorupFound, message: '' };
+  return result;
 }
 
 async function deleteById({ id }: { id: string }) {
@@ -57,7 +54,7 @@ async function deleteById({ id }: { id: string }) {
       .where(eq(materialGroupsTable.id, id))
       .returning();
 
-    return { data: deletedMaterial[0], message: 'O material foi deletado.' };
+    return deletedMaterial[0];
   } catch (error) {
     throw new NotFoundError({
       message: 'O material não foi deletado.',
