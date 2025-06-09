@@ -17,16 +17,15 @@ async function create(materialInputValues: MaterialInsertDatabase) {
       .values(materialInputValues)
       .returning();
 
-    return { data: createdMaterial[0], message: 'O Material foi cadastrado.' };
+    return createdMaterial[0];
   } catch (error) {
     throw new ValidationError({ cause: error });
   }
 
   async function validateUniqueMaterial(materialName: string) {
-    const { data } = await findByMaterialName(materialName);
-    console.log(data);
+    const result = await findByMaterialName(materialName);
 
-    if (data.length > 0)
+    if (result.length > 0)
       throw new ValidationError({
         message: 'O material informado já foi cadastrado.',
         action: 'Utilize outro nome para cadastrar.'
@@ -47,13 +46,10 @@ async function findByMaterialName(materialName: string) {
     .where(eq(sql`LOWER(${materialsTable.name})`, materialName.toLowerCase()));
 
   if (materialsFound.length === 0) {
-    return {
-      data: materialsFound,
-      message: 'Material não encontrado.'
-    };
+    throw new NotFoundError({ message: 'Material não encontrado.' });
   }
 
-  return { data: materialsFound, message: '' };
+  return materialsFound;
 }
 
 async function findOneById(id: string) {
@@ -78,12 +74,12 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
 
   const areEqual = compareObjectsByKeys(
     updatedMaterialInputValues,
-    registeredMaterial.data[0],
+    registeredMaterial[0],
     keysToCompare
   );
 
   if (areEqual) {
-    return { data: {}, message: 'Nenhuma alteração a ser feita.' };
+    return { message: 'Nenhuma alteração a ser feita.' };
   }
 
   const result = await database.client
@@ -95,7 +91,7 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
     .where(eq(materialsTable.name, updatedMaterialInputValues.name))
     .returning();
 
-  return { data: result[0], message: '' };
+  return result[0];
 }
 
 async function deleteById({ id }: { id: string }) {
@@ -104,7 +100,7 @@ async function deleteById({ id }: { id: string }) {
       .delete(materialsTable)
       .where(eq(materialsTable.id, id))
       .returning();
-    return { data: deletedMaterial[0], message: 'O Material foi deletado.' };
+    return deletedMaterial[0];
   } catch (error) {
     throw new NotFoundError({
       message: 'O Material não pode ser deletado.',
