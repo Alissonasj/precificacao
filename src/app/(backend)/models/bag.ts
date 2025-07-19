@@ -42,10 +42,6 @@ async function findByBagName(bagName: string) {
     .from(bagsTable)
     .where(eq(sql`LOWER(${bagsTable.name})`, bagName.toLowerCase()));
 
-  if (result.length === 0) {
-    throw new NotFoundError({ message: 'Bolsa não encontrada.' });
-  }
-
   return result;
 }
 

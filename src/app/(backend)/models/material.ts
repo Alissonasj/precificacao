@@ -33,23 +33,19 @@ async function create(materialInputValues: MaterialInsertDatabase) {
   }
 }
 
-async function findAll() {
-  const allMaterials = await database.client.select().from(materialsTable);
-
-  return allMaterials;
-}
-
 async function findByMaterialName(materialName: string) {
   const materialsFound = await database.client
     .select()
     .from(materialsTable)
     .where(eq(sql`LOWER(${materialsTable.name})`, materialName.toLowerCase()));
 
-  if (materialsFound.length === 0) {
-    throw new NotFoundError({ message: 'Material não encontrado.' });
-  }
-
   return materialsFound;
+}
+
+async function findAll() {
+  const allMaterials = await database.client.select().from(materialsTable);
+
+  return allMaterials;
 }
 
 async function findOneById(id: string) {
