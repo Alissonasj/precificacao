@@ -21,7 +21,7 @@ export default async function BagDetails({ params }: BagDetailsProps) {
         <li>Atualizando em: {data.updatedAt.toString()}</li>
       </ul>
 
-      <PrecificationForm />
+      <PrecificationForm bagName={data.name} />
     </>
   );
 }
