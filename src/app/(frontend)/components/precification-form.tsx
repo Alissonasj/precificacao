@@ -1,36 +1,59 @@
 'use client';
 
+import { createPrecificationAction, getOneMaterialAction } from '@/actions';
+import { CalculationType } from '@/types/calculation-type';
+import {
+  PrecificationFormData,
+  precificationFormSchema
+} from '@/types/precification';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
-import { Form, FormField, FormItem } from '@ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@ui/form';
+import { Input } from '@ui/input';
+import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import MaterialsSelect from './material-select';
+import MaterialSelect from './material-select';
 
-const formSchema = z.object({
-  material: z.array(
-    z.object({
-      name: z.string().min(1)
-    })
-  )
-});
-
-type FormData = z.infer<typeof formSchema>;
-
-export default function PrecificationForm() {
-  const hookForm = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+export default function PrecificationForm({ bagName }: { bagName: string }) {
+  const hookForm = useForm<PrecificationFormData>({
+    resolver: zodResolver(precificationFormSchema),
     defaultValues: {
-      material: [{ name: '' }]
+      materials: [
+        {
+          fkMaterial: '',
+          fkBag: bagName,
+          layer: '0',
+          width: '0',
+          length: '0',
+          price: '0',
+          calculatedValue: '0'
+        }
+      ]
     }
   });
   const hookFields = useFieldArray({
-    name: 'material',
+    name: 'materials',
     control: hookForm.control
   });
+  const [calculationType, setCalculationType] = useState<{
+    [key: number]: string;
+  }>({});
 
-  function onSubmit(data: FormData) {
-    console.log(data);
+  async function onSubmit(formInputValues: PrecificationFormData) {
+    await createPrecificationAction(formInputValues, bagName);
+  }
+
+  async function handleChange(value: string, index: number) {
+    const result = await getOneMaterialAction(value);
+    hookForm.setValue(`materials.${index}.fkMaterial`, value);
+    setCalculationType({ ...calculationType, [index]: result.calculationType });
   }
 
   return (
@@ -41,13 +64,74 @@ export default function PrecificationForm() {
             <section key={hookField.id}>
               <FormField
                 control={hookForm.control}
-                name={`material.${index}.name`}
+                name={`materials.${index}.fkMaterial`}
+                render={({ field }) => (
+                  <>
+                    <FormItem>
+                      <FormLabel>Material:</FormLabel>
+                      <MaterialSelect
+                        onValueChange={(value) => {
+                          handleChange(value, index);
+                        }}
+                        defaultValue={field.value}
+                      />
+                      <FormMessage />
+                    </FormItem>
+
+                    {calculationType[index] ===
+                      CalculationType.LENGTH_WIDTH && (
+                      <FormField
+                        control={hookForm.control}
+                        name={`materials.${index}.layer`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Camadas:</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder='Digite o número de camadas'
+                                type='number'
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  </>
+                )}
+              />
+              <FormField
+                control={hookForm.control}
+                name={`materials.${index}.length`}
                 render={({ field }) => (
                   <FormItem>
-                    <MaterialsSelect
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    />
+                    <FormLabel>Comprimento:</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Digite o comprimento'
+                        type='number'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={hookForm.control}
+                name={`materials.${index}.width`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Largura:</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Digite a largura'
+                        type='number'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -60,12 +144,24 @@ export default function PrecificationForm() {
             </section>
           );
         })}
+
         <Button
           type='button'
-          onClick={() => hookFields.append({ name: '' })}
+          onClick={() =>
+            hookFields.append({
+              fkMaterial: '',
+              fkBag: bagName,
+              layer: '0',
+              width: '0',
+              length: '0',
+              price: '0',
+              calculatedValue: '0'
+            })
+          }
         >
           Add
         </Button>
+
         <Button type='submit'>Submit</Button>
       </form>
     </Form>

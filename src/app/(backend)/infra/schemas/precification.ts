@@ -1,6 +1,4 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { bagsTable } from './bag';
-import { materialsTable } from './material';
 
 export const precificationsTable = pgTable('bags_materials', {
   id: uuid().defaultRandom().primaryKey(),
@@ -9,12 +7,8 @@ export const precificationsTable = pgTable('bags_materials', {
   width: numeric('width', { mode: 'number' }),
   length: numeric('length', { mode: 'number' }),
   calculatedValue: numeric('calculated_value', { mode: 'number' }),
-  fkBag: uuid('fk_bag')
-    .references(() => bagsTable.id)
-    .notNull(),
-  fkMaterial: text('fk_material')
-    .references(() => materialsTable.name)
-    .notNull(),
+  fkBag: text('fk_bag').notNull(),
+  fkMaterial: text('fk_material').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

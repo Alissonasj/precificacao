@@ -1,5 +1,6 @@
 import { PrecificationInsertDatabase } from '@/types/precification';
 import { database } from '@backend/infra/database';
+import { ValidationError } from '@backend/infra/errors';
 import { precificationsTable } from '@db_schemas/precification';
 
 async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
@@ -10,12 +11,9 @@ async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
       .onConflictDoNothing()
       .returning();
 
-    return {
-      data: createdPrevificatrion,
-      message: 'Precificação realizada.'
-    };
+    return createdPrevificatrion;
   } catch (error) {
-    throw error;
+    throw new ValidationError({ cause: error });
   }
 }
 
