@@ -4,6 +4,7 @@ export const materialsTable = pgTable('materials', {
   id: uuid().defaultRandom().unique(),
   name: text('name').primaryKey(),
   price: numeric({ mode: 'number' }).notNull(),
+  calculationType: text('calculation_type').notNull(),
   baseWidth: numeric('base_width', { mode: 'number' }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
@@ -11,14 +12,12 @@ export const materialsTable = pgTable('materials', {
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
-  fkGroup: text('fk_group')
-    .references(() => materialGroupsTable.group)
-    .notNull()
+  fkGroup: text('fk_group').notNull()
 });
 
 export const materialGroupsTable = pgTable('material_groups', {
   id: uuid().defaultRandom().unique(),
-  group: text('group').notNull().primaryKey(),
+  name: text('name').notNull().primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow()

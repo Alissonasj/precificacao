@@ -1,5 +1,6 @@
 'use client';
 
+import { getAllMaterialAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
 import {
@@ -17,7 +18,7 @@ type MaterialSelectProps = {
   defaultValue?: string;
 };
 
-export default function MaterialsSelect({
+export default function MaterialSelect({
   onValueChange,
   defaultValue
 }: MaterialSelectProps) {
@@ -25,10 +26,13 @@ export default function MaterialsSelect({
     MaterialSelectDatabase[]
   >([]);
 
+  async function fetchMaterials() {
+    const result = await getAllMaterialAction();
+    setMaterialsOptions(result);
+  }
+
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/materials')
-      .then((response) => response.json())
-      .then((data: MaterialSelectDatabase[]) => setMaterialsOptions(data));
+    fetchMaterials();
   }, []);
 
   return (

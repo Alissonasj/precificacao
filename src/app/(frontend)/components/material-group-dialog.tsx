@@ -2,8 +2,8 @@
 
 import { createMaterialGroupAction } from '@/actions';
 import {
-  materialGroupFormSchema,
-  MaterialGroupFormSchema
+  MaterialGroupFormData,
+  materialGroupFormSchema
 } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
@@ -51,14 +51,14 @@ export default function MaterialDialog() {
 }
 
 function MaterialGroupForm() {
-  const hookForm = useForm<MaterialGroupFormSchema>({
+  const hookForm = useForm<MaterialGroupFormData>({
     resolver: zodResolver(materialGroupFormSchema),
     defaultValues: {
-      group: ''
+      name: ''
     }
   });
 
-  async function onSubmit(materialGroupInputValues: MaterialGroupFormSchema) {
+  async function onSubmit(materialGroupInputValues: MaterialGroupFormData) {
     await createMaterialGroupAction(materialGroupInputValues);
   }
 
@@ -72,7 +72,7 @@ function MaterialGroupForm() {
           <div className='col-span-4'>
             <FormField
               control={hookForm.control}
-              name='group'
+              name='name'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Grupo</FormLabel>

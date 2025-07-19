@@ -1,15 +1,16 @@
+import { MaterialGroupInsertDatabase } from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { materialGroupsTable } from '@db_schemas/material';
 import { eq, sql } from 'drizzle-orm';
 
-async function create({ group }: { group: string }) {
-  await validateUniqueGroup(group);
+async function create(materialGroups: MaterialGroupInsertDatabase) {
+  await validateUniqueGroup(materialGroups.name);
 
   try {
     const createdGroup = await database.client
       .insert(materialGroupsTable)
-      .values({ group })
+      .values(materialGroups)
       .returning();
 
     return createdGroup[0];
@@ -17,10 +18,10 @@ async function create({ group }: { group: string }) {
     throw new ValidationError({ cause: error });
   }
 
-  async function validateUniqueGroup(group: string) {
-    const result = await findByGroup(group);
+  async function validateUniqueGroup(groupName: string) {
+    const result = await findByGroupName(groupName);
 
-    if (result)
+    if (result.length > 0)
       throw new ValidationError({
         message: 'O grupo informado já foi cadastrado.',
         action: 'Utilize outro grupo para cadastrar.'
@@ -34,15 +35,13 @@ async function findAll() {
   return allGroups;
 }
 
-async function findByGroup(group: string) {
+async function findByGroupName(groupName: string) {
   const result = await database.client
     .select()
     .from(materialGroupsTable)
-    .where(eq(sql`LOWER(${materialGroupsTable.group})`, group.toLowerCase()));
-
-  if (result.length === 0) {
-    throw new NotFoundError({ message: 'Grupo não encontrado.' });
-  }
+    .where(
+      eq(sql`LOWER(${materialGroupsTable.name})`, groupName.toLowerCase())
+    );
 
   return result;
 }
@@ -66,7 +65,7 @@ async function deleteById({ id }: { id: string }) {
 const materialGroup = {
   create,
   findAll,
-  findByGroup,
+  findByGroupName,
   deleteById
 };
 

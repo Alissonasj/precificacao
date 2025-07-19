@@ -1,5 +1,6 @@
 'use client';
 
+import { getAllMaterialGroupAction } from '@/actions';
 import { MaterialGroupSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
 import {
@@ -25,12 +26,13 @@ export function MaterialGroupsSelect({
     MaterialGroupSelectDatabase[]
   >([]);
 
+  async function fetchMaterialGroups() {
+    const result = await getAllMaterialGroupAction();
+    setMaterialGroupsOptions(result);
+  }
+
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/material-groups')
-      .then((response) => response.json())
-      .then((data: MaterialGroupSelectDatabase[]) =>
-        setMaterialGroupsOptions(data)
-      );
+    fetchMaterialGroups();
   }, []);
 
   return (
@@ -50,9 +52,9 @@ export function MaterialGroupsSelect({
             return (
               <SelectItem
                 key={group.id}
-                value={group.group}
+                value={group.name}
               >
-                {group.group}
+                {group.name}
               </SelectItem>
             );
           })}

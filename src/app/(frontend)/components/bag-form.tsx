@@ -1,7 +1,7 @@
 'use client';
 
 import { createBagAction } from '@/actions';
-import { bagFormSchema, BagFormSchema } from '@/types/bag';
+import { BagFormData, bagFormSchema } from '@/types/bag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
 import {
@@ -22,12 +22,12 @@ export default function BagForm() {
     price: ''
   };
 
-  const hookForm = useForm<BagFormSchema>({
+  const hookForm = useForm<BagFormData>({
     resolver: zodResolver(bagFormSchema),
     defaultValues
   });
 
-  async function onSubmit(bagInputValues: BagFormSchema) {
+  async function onSubmit(bagInputValues: BagFormData) {
     await createBagAction(bagInputValues);
   }
 

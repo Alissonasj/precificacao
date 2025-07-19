@@ -24,9 +24,10 @@ export default function Home() {
                 <li>Nome: {m.name}</li>
                 <li>Preço: {m.price}</li>
                 <li>Largura Base: {m.baseWidth} cm</li>
+                <li>Grupo: {m.fkGroup}</li>
                 <li>Criado em: {m.createdAt.toString()}</li>
                 <li>Atualizado em: {m.updatedAt.toString()}</li>
-                <li>Grupo: {m.fkGroup}</li>
+                <li>Tipo de cálculo: {m.calculationType}</li>
               </div>
             );
           })}

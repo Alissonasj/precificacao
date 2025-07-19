@@ -10,4 +10,4 @@ export const bagFormSchema = z.object({
   price: z.string()
 });
 
-export type BagFormSchema = z.infer<typeof bagFormSchema>;
+export type BagFormData = z.infer<typeof bagFormSchema>;
