@@ -1,7 +1,8 @@
 'use client';
 
 import { createMaterialAction } from '@/actions';
-import { materialFormSchema, MaterialFormSchema } from '@/types/material';
+import { CalculationType } from '@/types/calculation-type';
+import { MaterialFormData, materialFormSchema } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
 import {
@@ -13,23 +14,23 @@ import {
   FormMessage
 } from '@ui/form';
 import { Input } from '@ui/input';
+import { RadioGroup, RadioGroupItem } from '@ui/shadcn/radio-group';
 import { useForm } from 'react-hook-form';
 import MaterialDialog from './material-group-dialog';
 import { MaterialGroupsSelect } from './material-groups-select';
 
 export default function MaterialForm() {
-  const defaultValues = {
-    name: '',
-    group: '',
-    price: '',
-    baseWidth: '0'
-  };
-  const hookForm = useForm<MaterialFormSchema>({
+  const hookForm = useForm<MaterialFormData>({
     resolver: zodResolver(materialFormSchema),
-    defaultValues
+    defaultValues: {
+      name: '',
+      fkGroup: '',
+      price: '',
+      baseWidth: '0'
+    }
   });
 
-  async function onSubmit(materialInputValues: MaterialFormSchema) {
+  async function onSubmit(materialInputValues: MaterialFormData) {
     await createMaterialAction(materialInputValues);
   }
 
@@ -85,19 +86,70 @@ export default function MaterialForm() {
           <div className='col-span-4'>
             <FormField
               control={hookForm.control}
-              name='baseWidth'
+              name='calculationType'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lagura base (em cm)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Digite a lagura base se houver'
-                      type='number'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <>
+                  <FormItem className='space-y-3'>
+                    <FormLabel>Tipo de calculo</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className='flex flex-col'
+                      >
+                        <FormItem className='flex items-center gap-3'>
+                          <FormControl>
+                            <RadioGroupItem
+                              value={CalculationType.LENGTH_WIDTH}
+                            />
+                          </FormControl>
+                          <FormLabel className='font-normal'>
+                            Comprimento / Largura
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className='flex items-center gap-3'>
+                          <FormControl>
+                            <RadioGroupItem value={CalculationType.LENGTH} />
+                          </FormControl>
+                          <FormLabel className='font-normal'>
+                            Comprimento
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem className='flex items-center gap-3'>
+                          <FormControl>
+                            <RadioGroupItem value={CalculationType.UNITY} />
+                          </FormControl>
+                          <FormLabel className='font-normal'>Unidade</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+
+                  {field.value === CalculationType.LENGTH_WIDTH && (
+                    <div className='grid grid-cols-12 gap-4'>
+                      <div className='col-span-4'>
+                        <FormField
+                          control={hookForm.control}
+                          name='baseWidth'
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Lagura base (em cm)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder='Digite a lagura base se houver'
+                                  type='number'
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             />
           </div>
