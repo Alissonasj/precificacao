@@ -126,29 +126,28 @@ export default function MaterialForm() {
                     <FormMessage />
                   </FormItem>
 
-                  {field.value === CalculationType.LENGTH_WIDTH && (
-                    <div className='grid grid-cols-12 gap-4'>
-                      <div className='col-span-4'>
-                        <FormField
-                          control={hookForm.control}
-                          name='baseWidth'
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Lagura base (em cm)</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder='Digite a lagura base se houver'
-                                  type='number'
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                  <div className='grid grid-cols-12 gap-4'>
+                    <div className='col-span-4'>
+                      <FormField
+                        control={hookForm.control}
+                        name='baseWidth'
+                        disabled={field.value !== CalculationType.LENGTH_WIDTH}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Lagura base (em cm)</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder='Digite a lagura base se houver'
+                                type='number'
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
-                  )}
+                  </div>
                 </>
               )}
             />

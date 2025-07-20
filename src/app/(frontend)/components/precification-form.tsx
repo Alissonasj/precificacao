@@ -30,6 +30,7 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
           fkMaterial: '',
           fkBag: bagName,
           layer: '0',
+          unity: '0',
           width: '0',
           length: '0',
           price: '0',
@@ -78,63 +79,94 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
                       <FormMessage />
                     </FormItem>
 
-                    {calculationType[index] ===
-                      CalculationType.LENGTH_WIDTH && (
-                      <FormField
-                        control={hookForm.control}
-                        name={`materials.${index}.layer`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Camadas:</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder='Digite o número de camadas'
-                                type='number'
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                    <FormField
+                      control={hookForm.control}
+                      name={`materials.${index}.unity`}
+                      disabled={
+                        calculationType[index] !== CalculationType.UNITY
+                      }
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Unidade:</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Digite o número de unidades'
+                              type='number'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={hookForm.control}
+                      name={`materials.${index}.width`}
+                      disabled={
+                        calculationType[index] === CalculationType.UNITY ||
+                        calculationType[index] === CalculationType.LENGTH
+                      }
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Largura:</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Digite a largura'
+                              type='number'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={hookForm.control}
+                      name={`materials.${index}.layer`}
+                      disabled={
+                        calculationType[index] === CalculationType.UNITY
+                      }
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Camadas:</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Digite o número de camadas'
+                              type='number'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={hookForm.control}
+                      name={`materials.${index}.length`}
+                      disabled={
+                        calculationType[index] === CalculationType.UNITY
+                      }
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Comprimento:</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Digite o comprimento'
+                              type='number'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </>
                 )}
               />
-              <FormField
-                control={hookForm.control}
-                name={`materials.${index}.length`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Comprimento:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Digite o comprimento'
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={hookForm.control}
-                name={`materials.${index}.width`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Largura:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Digite a largura'
-                        type='number'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <Button
                 type='button'
                 onClick={() => hookFields.remove(index)}
@@ -153,6 +185,7 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
               fkBag: bagName,
               layer: '0',
               width: '0',
+              unity: '0',
               length: '0',
               price: '0',
               calculatedValue: '0'
