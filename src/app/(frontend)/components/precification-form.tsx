@@ -59,10 +59,16 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
 
   return (
     <Form {...hookForm}>
-      <form onSubmit={hookForm.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={hookForm.handleSubmit(onSubmit)}
+        className='px-6 space-y-10'
+      >
         {hookFields.fields.map((hookField, index) => {
           return (
-            <section key={hookField.id}>
+            <section
+              key={hookField.id}
+              className='space-y-2.5'
+            >
               <FormField
                 control={hookForm.control}
                 name={`materials.${index}.fkMaterial`}
@@ -177,25 +183,26 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
           );
         })}
 
-        <Button
-          type='button'
-          onClick={() =>
-            hookFields.append({
-              fkMaterial: '',
-              fkBag: bagName,
-              layer: '0',
-              width: '0',
-              unity: '0',
-              length: '0',
-              price: '0',
-              calculatedValue: '0'
-            })
-          }
-        >
-          Add
-        </Button>
-
-        <Button type='submit'>Submit</Button>
+        <div className='space-x-2.5'>
+          <Button
+            type='button'
+            onClick={() =>
+              hookFields.append({
+                fkMaterial: '',
+                fkBag: bagName,
+                layer: '0',
+                width: '0',
+                unity: '0',
+                length: '0',
+                price: '0',
+                calculatedValue: '0'
+              })
+            }
+          >
+            Add
+          </Button>
+          <Button type='submit'>Submit</Button>
+        </div>
       </form>
     </Form>
   );

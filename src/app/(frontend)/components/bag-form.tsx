@@ -35,70 +35,58 @@ export default function BagForm() {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8 p-10'
+        className='space-y-8'
       >
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
-            <FormField
-              control={hookForm.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome da bolsa</FormLabel>
-                  <FormControl>
-                    <Input
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+        <FormField
+          control={hookForm.control}
+          name='name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome da bolsa</FormLabel>
+              <FormControl>
+                <Input
+                  type='text'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
-            <FormField
-              control={hookForm.control}
-              name='price'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Preço</FormLabel>
-                  <FormControl>
-                    <Input
-                      type='number'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+        <FormField
+          control={hookForm.control}
+          name='price'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Preço</FormLabel>
+              <FormControl>
+                <Input
+                  type='number'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
-            <FormField
-              control={hookForm.control}
-              name='hoursWorked'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Horas trabalhadas</FormLabel>
-                  <FormControl>
-                    <Input
-                      type='number'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+        <FormField
+          control={hookForm.control}
+          name='hoursWorked'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Horas trabalhadas</FormLabel>
+              <FormControl>
+                <Input
+                  type='number'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <Button type='submit'>Submit</Button>
       </form>

@@ -1,5 +1,11 @@
 import { getOneBagAction } from '@/actions';
 import PrecificationForm from '@components/precification-form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader
+} from '@ui/shadcn/card';
 
 type BagDetailsProps = {
   params: Promise<{ name: string }>;
@@ -7,21 +13,24 @@ type BagDetailsProps = {
 
 export default async function BagDetails({ params }: BagDetailsProps) {
   const { name } = await params;
-  const data = await getOneBagAction(name);
+  const bag = await getOneBagAction(name);
 
   return (
-    <>
-      <h1>Detalhes da bolsa</h1>
-      <ul>
-        <li>ID: {data.id}</li>
-        <li>Nome: {data.name}</li>
-        <li>Preço: {data.price}</li>
-        <li>Horas trabalhadas: {data.hoursWorked}</li>
-        <li>Criada em: {data.createdAt.toString()}</li>
-        <li>Atualizando em: {data.updatedAt.toString()}</li>
-      </ul>
+    <Card>
+      <CardHeader>
+        <h1>
+          Detalhes da <strong>{bag.name}</strong>
+        </h1>
+        <CardDescription>{bag.id}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div>Preço: {bag.price}</div>
+        <div>Horas trabalhadas: {bag.hoursWorked}</div>
+        <div>Criada em: {bag.createdAt.toString()}</div>
+        <div>Atuadivzando em: {bag.updatedAt.toString()}</div>
+      </CardContent>
 
-      <PrecificationForm bagName={data.name} />
-    </>
+      <PrecificationForm bagName={bag.name} />
+    </Card>
   );
 }

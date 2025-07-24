@@ -40,8 +40,8 @@ export function MaterialGroupsSelect({
       onValueChange={onValueChange}
       defaultValue={defaultValue}
     >
-      <FormControl>
-        <SelectTrigger className='w-180px'>
+      <FormControl className='w-full'>
+        <SelectTrigger>
           <SelectValue placeholder='Escolha o grupo' />
         </SelectTrigger>
       </FormControl>

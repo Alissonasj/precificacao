@@ -10,7 +10,6 @@ import { Button } from '@ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -27,7 +26,7 @@ import { Input } from '@ui/input';
 import { PlusCircleIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
-export default function MaterialDialog() {
+export default function MaterialGroupDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -38,9 +37,6 @@ export default function MaterialDialog() {
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Adicione um novo Grupo</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here.
-          </DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <MaterialGroupForm />
@@ -66,29 +62,26 @@ function MaterialGroupForm() {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8 p-10'
+        className='space-y-8'
       >
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
-            <FormField
-              control={hookForm.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Grupo</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Digite o nome do grupo'
-                      type='text'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+        <FormField
+          control={hookForm.control}
+          name='name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Grupo</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder='Digite o nome do grupo'
+                  type='text'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type='submit'>Submit</Button>
       </form>
     </Form>

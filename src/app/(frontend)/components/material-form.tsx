@@ -16,7 +16,7 @@ import {
 import { Input } from '@ui/input';
 import { RadioGroup, RadioGroupItem } from '@ui/shadcn/radio-group';
 import { useForm } from 'react-hook-form';
-import MaterialDialog from './material-group-dialog';
+import MaterialGroupDialog from './material-group-dialog';
 import { MaterialGroupsSelect } from './material-groups-select';
 
 export default function MaterialForm() {
@@ -38,10 +38,10 @@ export default function MaterialForm() {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8 p-10'
+        className='space-y-8'
       >
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
+        <div>
+          <div>
             <FormField
               control={hookForm.control}
               name='name'
@@ -62,8 +62,8 @@ export default function MaterialForm() {
           </div>
         </div>
 
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
+        <div className='flex items-end gap-2.5'>
+          <div className='grow'>
             <FormField
               control={hookForm.control}
               name='fkGroup'
@@ -78,84 +78,78 @@ export default function MaterialForm() {
                 </FormItem>
               )}
             />
-            <MaterialDialog />
           </div>
+          <MaterialGroupDialog />
         </div>
 
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
-            <FormField
-              control={hookForm.control}
-              name='calculationType'
-              render={({ field }) => (
-                <>
-                  <FormItem className='space-y-3'>
-                    <FormLabel>Tipo de calculo</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className='flex flex-col'
-                      >
-                        <FormItem className='flex items-center gap-3'>
-                          <FormControl>
-                            <RadioGroupItem
-                              value={CalculationType.LENGTH_WIDTH}
-                            />
-                          </FormControl>
-                          <FormLabel className='font-normal'>
-                            Comprimento / Largura
-                          </FormLabel>
-                        </FormItem>
-                        <FormItem className='flex items-center gap-3'>
-                          <FormControl>
-                            <RadioGroupItem value={CalculationType.LENGTH} />
-                          </FormControl>
-                          <FormLabel className='font-normal'>
-                            Comprimento
-                          </FormLabel>
-                        </FormItem>
-                        <FormItem className='flex items-center gap-3'>
-                          <FormControl>
-                            <RadioGroupItem value={CalculationType.UNITY} />
-                          </FormControl>
-                          <FormLabel className='font-normal'>Unidade</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+        <div className='space-y-8'>
+          <FormField
+            control={hookForm.control}
+            name='calculationType'
+            render={({ field }) => (
+              <>
+                <FormItem>
+                  <FormLabel>Tipo de calculo</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className='flex flex-col'
+                    >
+                      <FormItem className='flex items-center gap-3'>
+                        <FormControl>
+                          <RadioGroupItem
+                            value={CalculationType.LENGTH_WIDTH}
+                          />
+                        </FormControl>
+                        <FormLabel className='font-normal'>
+                          Comprimento / Largura
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className='flex items-center gap-3'>
+                        <FormControl>
+                          <RadioGroupItem value={CalculationType.LENGTH} />
+                        </FormControl>
+                        <FormLabel className='font-normal'>
+                          Comprimento
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className='flex items-center gap-3'>
+                        <FormControl>
+                          <RadioGroupItem value={CalculationType.UNITY} />
+                        </FormControl>
+                        <FormLabel className='font-normal'>Unidade</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
 
-                  <div className='grid grid-cols-12 gap-4'>
-                    <div className='col-span-4'>
-                      <FormField
-                        control={hookForm.control}
-                        name='baseWidth'
-                        disabled={field.value !== CalculationType.LENGTH_WIDTH}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Lagura base (em cm)</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder='Digite a lagura base se houver'
-                                type='number'
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-            />
-          </div>
+                <FormField
+                  control={hookForm.control}
+                  name='baseWidth'
+                  disabled={field.value !== CalculationType.LENGTH_WIDTH}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lagura base (em cm)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Digite a largura base'
+                          type='number'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+          />
         </div>
 
-        <div className='grid grid-cols-12 gap-4'>
-          <div className='col-span-4'>
+        <div>
+          <div>
             <FormField
               control={hookForm.control}
               name='price'
