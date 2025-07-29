@@ -26,7 +26,7 @@ export async function createMaterialAction(
   return responseData;
 }
 
-export async function getAllMaterialAction() {
+export async function getAllMaterialsAction() {
   const response = await fetch('http://localhost:3000/api/v1/materials');
   const responseData: MaterialSelectDatabase[] = await response.json();
 
@@ -55,7 +55,7 @@ export async function createMaterialGroupAction(
   return responseData;
 }
 
-export async function getAllMaterialGroupAction() {
+export async function getAllMaterialGroupsAction() {
   const response = await fetch('http://localhost:3000/api/v1/material-groups');
   const responseData: MaterialGroupSelectDatabase[] = await response.json();
 
@@ -69,13 +69,20 @@ export async function getOneBagAction(bagName: string) {
   return responseData[0];
 }
 
+export async function getAllBagsAction() {
+  const response = await fetch('http://localhost:3000/api/v1/bags');
+  const responseData: BagSelectDatabase[] = await response.json();
+
+  return responseData;
+}
+
 export async function createBagAction(bagInputValues: BagFormData) {
   const response = await fetch('http://localhost:3000/api/v1/bags', {
     method: 'POST',
     body: JSON.stringify({
       name: bagInputValues.name,
-      price: Number(bagInputValues.price),
-      hoursWorked: Number(bagInputValues.hoursWorked)
+      hoursWorked: Number(bagInputValues.hoursWorked),
+      suggestedPrice: bagInputValues.suggestedPrice
     })
   });
 
