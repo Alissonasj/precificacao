@@ -16,15 +16,13 @@ import { Input } from '@ui/input';
 import { useForm } from 'react-hook-form';
 
 export default function BagForm() {
-  const defaultValues = {
-    name: '',
-    hoursWorked: '',
-    price: ''
-  };
-
   const hookForm = useForm<BagFormData>({
     resolver: zodResolver(bagFormSchema),
-    defaultValues
+    defaultValues: {
+      name: '',
+      hoursWorked: '',
+      suggestedPrice: 0
+    }
   });
 
   async function onSubmit(bagInputValues: BagFormData) {
@@ -46,23 +44,6 @@ export default function BagForm() {
               <FormControl>
                 <Input
                   type='text'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={hookForm.control}
-          name='price'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Preço</FormLabel>
-              <FormControl>
-                <Input
-                  type='number'
                   {...field}
                 />
               </FormControl>

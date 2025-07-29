@@ -8,12 +8,10 @@ export type PrecificationSelectDatabase =
 export const precificationFormSchema = z.object({
   materials: z.array(
     z.object({
-      layer: z.string(),
+      layers: z.string(),
       length: z.string(),
       width: z.string(),
-      price: z.string(),
       unity: z.string(),
-      calculatedValue: z.string(),
       fkMaterial: z.string().min(1, 'Escolha um material'),
       fkBag: z.string()
     })

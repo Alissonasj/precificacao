@@ -24,10 +24,10 @@ export default async function BagDetails({ params }: BagDetailsProps) {
         <CardDescription>{bag.id}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div>Preço: {bag.price}</div>
+        <div>Preço: {bag.suggestedPrice}</div>
         <div>Horas trabalhadas: {bag.hoursWorked}</div>
         <div>Criada em: {bag.createdAt.toString()}</div>
-        <div>Atuadivzando em: {bag.updatedAt.toString()}</div>
+        <div>Atualizado em: {bag.updatedAt.toString()}</div>
       </CardContent>
 
       <PrecificationForm bagName={bag.name} />

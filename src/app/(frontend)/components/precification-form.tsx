@@ -29,12 +29,10 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
         {
           fkMaterial: '',
           fkBag: bagName,
-          layer: '0',
+          layers: '0',
           unity: '0',
           width: '0',
-          length: '0',
-          price: '0',
-          calculatedValue: '0'
+          length: '0'
         }
       ]
     }
@@ -130,7 +128,7 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
 
                     <FormField
                       control={hookForm.control}
-                      name={`materials.${index}.layer`}
+                      name={`materials.${index}.layers`}
                       disabled={
                         calculationType[index] === CalculationType.UNITY
                       }
@@ -190,12 +188,10 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
               hookFields.append({
                 fkMaterial: '',
                 fkBag: bagName,
-                layer: '0',
+                layers: '0',
                 width: '0',
                 unity: '0',
-                length: '0',
-                price: '0',
-                calculatedValue: '0'
+                length: '0'
               })
             }
           >

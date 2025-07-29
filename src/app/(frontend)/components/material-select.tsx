@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllMaterialAction } from '@/actions';
+import { getAllMaterialsAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
 import {
@@ -27,7 +27,7 @@ export default function MaterialSelect({
   >([]);
 
   async function fetchMaterials() {
-    const result = await getAllMaterialAction();
+    const result = await getAllMaterialsAction();
     setMaterialsOptions(result);
   }
 

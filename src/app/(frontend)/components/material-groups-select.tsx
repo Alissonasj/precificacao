@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllMaterialGroupAction } from '@/actions';
+import { getAllMaterialGroupsAction } from '@/actions';
 import { MaterialGroupSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
 import {
@@ -27,7 +27,7 @@ export function MaterialGroupsSelect({
   >([]);
 
   async function fetchMaterialGroups() {
-    const result = await getAllMaterialGroupAction();
+    const result = await getAllMaterialGroupsAction();
     setMaterialGroupsOptions(result);
   }
 
