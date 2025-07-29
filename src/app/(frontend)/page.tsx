@@ -1,5 +1,6 @@
 'use client';
 
+import { getAllMaterialsAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
 import MaterialForm from '@components/material-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@ui/shadcn/card';
@@ -8,10 +9,13 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const [materials, setMaterials] = useState<MaterialSelectDatabase[]>();
 
+  async function fetchMaterials() {
+    const result = await getAllMaterialsAction();
+    setMaterials(result);
+  }
+
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/materials')
-      .then((response) => response.json())
-      .then((data) => setMaterials(data));
+    fetchMaterials();
   }, []);
 
   return (
