@@ -37,7 +37,7 @@ async function findByMaterialName(materialName: string) {
   const materialsFound = await database.client
     .select()
     .from(materialsTable)
-    .where(eq(sql`LOWER(${materialsTable.name})`, materialName.toLowerCase()));
+    .where(sql`unaccent(name) ILIKE unaccent(${`%${materialName}%`})`);
 
   return materialsFound;
 }

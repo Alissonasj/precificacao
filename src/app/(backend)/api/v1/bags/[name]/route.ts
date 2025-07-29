@@ -6,9 +6,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/bags/', '');
+  const bagNameNormalized = decodeURIComponent(finalUrl);
 
   try {
-    const bagFound = await bag.findByBagName(finalUrl);
+    const bagFound = await bag.findByBagName(bagNameNormalized);
 
     return NextResponse.json(bagFound);
   } catch (error) {

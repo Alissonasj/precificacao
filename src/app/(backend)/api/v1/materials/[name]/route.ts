@@ -5,9 +5,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
   const finalUrl = url.pathname.replace('/api/v1/materials/', '');
+  const materialNameNormalized = decodeURIComponent(finalUrl);
 
   try {
-    const materialFound = await material.findByMaterialName(finalUrl);
+    const materialFound = await material.findByMaterialName(
+      materialNameNormalized
+    );
 
     return NextResponse.json(materialFound);
   } catch (error) {

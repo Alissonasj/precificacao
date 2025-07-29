@@ -40,7 +40,7 @@ async function findByBagName(bagName: string) {
   const result = await database.client
     .select()
     .from(bagsTable)
-    .where(eq(sql`LOWER(${bagsTable.name})`, bagName.toLowerCase()));
+    .where(sql`unaccent(name) ILIKE unaccent(${`%${bagName}%`})`);
 
   return result;
 }
@@ -61,7 +61,7 @@ async function findOneById(id: string) {
 async function update(updatedBagInputValues: BagSelectDatabase) {
   const registeredBag = await findByBagName(updatedBagInputValues.name);
 
-  const keysToCompare = ['name', 'price', 'hoursWorked'] as const;
+  const keysToCompare = ['name', 'hoursWorked'] as const;
 
   const areEqual = compareObjectsByKeys(
     updatedBagInputValues,
