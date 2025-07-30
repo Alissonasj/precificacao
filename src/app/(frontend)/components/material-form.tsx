@@ -63,7 +63,7 @@ export default function MaterialForm() {
         </div>
 
         <div className='flex items-end gap-2.5'>
-          <div className='grow'>
+          <div>
             <FormField
               control={hookForm.control}
               name='fkGroup'

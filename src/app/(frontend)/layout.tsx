@@ -1,5 +1,7 @@
+import { Button } from '@ui/button';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import Link from 'next/link';
 import './globals.css';
 
 const geistSans = Geist({
@@ -25,8 +27,21 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex justify-center p-5`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased justify-center p-5`}
       >
+        <header>
+          <menu className='pb-5 space-x-2.5'>
+            <Link href='/'>
+              <Button variant={'outline'}>Home</Button>
+            </Link>
+            <Link href='/materials'>
+              <Button variant={'outline'}>Materials</Button>
+            </Link>
+            <Link href='/bags'>
+              <Button variant={'outline'}>Bags</Button>
+            </Link>
+          </menu>
+        </header>
         {children}
       </body>
     </html>

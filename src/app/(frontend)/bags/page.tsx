@@ -32,7 +32,7 @@ export default function Bags() {
           return (
             <Link
               className='block hover:shadow transition-shadow duration-300'
-              href={`/bags/${b.name}`}
+              href={`/bags/${b.name.toLowerCase()}`}
               key={b.id}
             >
               <Card>
