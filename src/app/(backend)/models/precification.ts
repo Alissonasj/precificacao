@@ -6,8 +6,18 @@ import { ValidationError } from '@backend/infra/errors';
 import { precificationsTable } from '@db_schemas/precification';
 import bag from './bag';
 
-async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
-  let suggestedPrice = 0;
+async function create(
+  bagMaterialsInpuntValues: PrecificationInsertDatabase[],
+  hoursWorked: number
+) {
+  const wege = 2500;
+  const weeklyHours = 48 * 4;
+  const hourlyWage = wege / weeklyHours;
+  const profitMargin = 0.45;
+  const commission = 0.15;
+  const cardFee = 0.124;
+  const totalPercentage = 1 + (profitMargin + commission + cardFee);
+  let calculatedPrice = hourlyWage * hoursWorked;
 
   await Promise.all(
     bagMaterialsInpuntValues.map(async (bagMaterial) => {
@@ -16,11 +26,11 @@ async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
       switch (result.calculationType) {
         case CalculationType.LENGTH_WIDTH:
           const calculatedMaterial =
-            ((result.price ?? 0) / (result.baseWidth ?? 0)) *
+            ((result.price ?? 0) / (100 * (result.baseWidth ?? 0))) *
             ((bagMaterial.width ?? 0) * (bagMaterial.length ?? 0)) *
             (bagMaterial.layers ?? 0);
           bagMaterial.calculatedPrice = calculatedMaterial;
-          suggestedPrice += calculatedMaterial;
+          calculatedPrice += calculatedMaterial;
 
           break;
 
@@ -29,7 +39,7 @@ async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
             ((result.price ?? 0) / (100 / (bagMaterial.length ?? 0))) *
             (bagMaterial.layers ?? 0);
           bagMaterial.calculatedPrice = calculatedLengthMaterial;
-          suggestedPrice += calculatedLengthMaterial;
+          calculatedPrice += calculatedLengthMaterial;
 
           break;
 
@@ -37,7 +47,7 @@ async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
           const calculatedUnityMaterial =
             (result.price ?? 0) * (bagMaterial.unity ?? 0);
           bagMaterial.calculatedPrice = calculatedUnityMaterial;
-          suggestedPrice += calculatedUnityMaterial;
+          calculatedPrice += calculatedUnityMaterial;
 
           break;
       }
@@ -51,11 +61,14 @@ async function create(bagMaterialsInpuntValues: PrecificationInsertDatabase[]) {
       .onConflictDoNothing()
       .returning();
 
+    const suggestedPrice = calculatedPrice * totalPercentage;
     const result = await bag.findByBagName(bagMaterialsInpuntValues[0].fkBag);
+
     bag.update({
       ...result[0],
       suggestedPrice
     });
+
     return createdPrecification;
   } catch (error) {
     throw new ValidationError({ cause: error });

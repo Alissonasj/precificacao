@@ -61,7 +61,7 @@ async function findOneById(id: string) {
 async function update(updatedBagInputValues: BagSelectDatabase) {
   const registeredBag = await findByBagName(updatedBagInputValues.name);
 
-  const keysToCompare = ['name', 'hoursWorked'] as const;
+  const keysToCompare = ['name', 'hoursWorked', 'suggestedPrice'] as const;
 
   const areEqual = compareObjectsByKeys(
     updatedBagInputValues,
