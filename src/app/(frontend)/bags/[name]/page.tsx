@@ -30,7 +30,10 @@ export default async function BagDetails({ params }: BagDetailsProps) {
         <div>Atualizado em: {bag.updatedAt.toString()}</div>
       </CardContent>
 
-      <PrecificationForm bagName={bag.name} />
+      <PrecificationForm
+        bagName={bag.name}
+        hoursWorked={bag.hoursWorked}
+      />
     </Card>
   );
 }

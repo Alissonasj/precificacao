@@ -21,7 +21,13 @@ import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import MaterialSelect from './material-select';
 
-export default function PrecificationForm({ bagName }: { bagName: string }) {
+export default function PrecificationForm({
+  bagName,
+  hoursWorked
+}: {
+  bagName: string;
+  hoursWorked: number;
+}) {
   const hookForm = useForm<PrecificationFormData>({
     resolver: zodResolver(precificationFormSchema),
     defaultValues: {
@@ -46,12 +52,12 @@ export default function PrecificationForm({ bagName }: { bagName: string }) {
   }>({});
 
   async function onSubmit(formInputValues: PrecificationFormData) {
-    await createPrecificationAction(formInputValues, bagName);
+    await createPrecificationAction(formInputValues, bagName, hoursWorked);
   }
 
-  async function handleChange(value: string, index: number) {
-    const result = await getOneMaterialAction(value);
-    hookForm.setValue(`materials.${index}.fkMaterial`, value);
+  async function handleChange(materialName: string, index: number) {
+    const result = await getOneMaterialAction(materialName);
+    hookForm.setValue(`materials.${index}.fkMaterial`, materialName);
     setCalculationType({ ...calculationType, [index]: result.calculationType });
   }
 

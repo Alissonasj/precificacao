@@ -93,13 +93,17 @@ export async function createBagAction(bagInputValues: BagFormData) {
 
 export async function createPrecificationAction(
   precificationInputValues: PrecificationFormData,
-  bgName: string
+  bgName: string,
+  hoursWorked: number
 ) {
   const response = await fetch(
     `http://localhost:3000/api/v1/bags/${bgName}/precification`,
     {
       method: 'POST',
-      body: JSON.stringify(precificationInputValues.materials)
+      body: JSON.stringify({
+        materials: precificationInputValues.materials,
+        hoursWorked
+      })
     }
   );
 
