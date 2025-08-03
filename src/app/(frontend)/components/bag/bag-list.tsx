@@ -2,7 +2,7 @@
 
 import { deleteBagAction } from '@/actions';
 import { BagSelectDatabase } from '@/types/bag';
-import { Button } from '@ui/button';
+import { Button } from '@ui/shadcn/button';
 import {
   Card,
   CardContent,

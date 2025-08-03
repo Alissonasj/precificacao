@@ -1,6 +1,6 @@
 import { getAllMaterialsAction } from '@/actions';
-import MaterialForm from '@components/material-form';
-import MaterialList from '@components/material-list';
+import MaterialForm from '@components/material/material-form';
+import MaterialList from '@components/material/material-list';
 
 export default async function Materials() {
   const materials = await getAllMaterialsAction();

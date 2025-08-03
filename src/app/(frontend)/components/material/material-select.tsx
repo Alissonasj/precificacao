@@ -2,7 +2,7 @@
 
 import { getAllMaterialsAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
-import { FormControl } from '@ui/form';
+import { FormControl } from '@ui/shadcn/form';
 import {
   Select,
   SelectContent,
@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@ui/select';
+} from '@ui/shadcn/select';
 import { useEffect, useState } from 'react';
 
 type MaterialSelectProps = {

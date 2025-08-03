@@ -6,8 +6,9 @@ import {
   PrecificationFormData,
   precificationFormSchema
 } from '@/types/precification';
+import MaterialSelect from '@components/material/material-select';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@ui/button';
+import { Button } from '@ui/shadcn/button';
 import {
   Form,
   FormControl,
@@ -15,11 +16,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@ui/form';
-import { Input } from '@ui/input';
+} from '@ui/shadcn/form';
+import { Input } from '@ui/shadcn/input';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import MaterialSelect from './material-select';
 
 export default function PrecificationForm({
   bagName,

@@ -1,5 +1,6 @@
 import { getOneBagAction } from '@/actions';
-import PrecificationForm from '@components/precification-form';
+import PrecificationForm from '@components/bag/precification-form';
+
 import {
   Card,
   CardContent,

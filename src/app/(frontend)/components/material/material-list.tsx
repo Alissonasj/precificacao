@@ -2,7 +2,7 @@
 
 import { deleteMaterialAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
-import { Button } from '@ui/button';
+import { Button } from '@ui/shadcn/button';
 import {
   Card,
   CardContent,

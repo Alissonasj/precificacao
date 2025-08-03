@@ -1,6 +1,6 @@
 import { getAllBagsAction } from '@/actions';
-import BagForm from '@components/bag-form';
-import BagList from '@components/bag-list';
+import BagForm from '@components/bag/bag-form';
+import BagList from '@components/bag/bag-list';
 
 export default async function Bags() {
   const bags = await getAllBagsAction();

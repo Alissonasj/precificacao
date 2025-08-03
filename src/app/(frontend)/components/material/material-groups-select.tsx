@@ -1,6 +1,6 @@
 import { getAllMaterialGroupsAction } from '@/actions';
 import { MaterialGroupSelectDatabase } from '@/types/material';
-import { FormControl } from '@ui/form';
+import { FormControl } from '@ui/shadcn/form';
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@ui/select';
+} from '@ui/shadcn/select';
 import { useEffect, useState } from 'react';
 
 type MaterialGroupsSelectProps = {
