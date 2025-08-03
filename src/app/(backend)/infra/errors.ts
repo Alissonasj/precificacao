@@ -67,7 +67,7 @@ export class NotFoundError extends Error {
     this.action = action || 'Verifique se o nome está correto.';
     this.statusCode = 404; // Not Found https://shre.ink/MUGc
 
-    Object.setPrototypeOf(this, ValidationError.prototype);
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 
   toJSON() {

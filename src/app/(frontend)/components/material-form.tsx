@@ -15,11 +15,13 @@ import {
 } from '@ui/form';
 import { Input } from '@ui/input';
 import { RadioGroup, RadioGroupItem } from '@ui/shadcn/radio-group';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import MaterialGroupDialog from './material-group-dialog';
-import { MaterialGroupsSelect } from './material-groups-select';
+import MaterialGroupsSelect from './material-groups-select';
 
 export default function MaterialForm() {
+  const router = useRouter();
   const hookForm = useForm<MaterialFormData>({
     resolver: zodResolver(materialFormSchema),
     defaultValues: {
@@ -31,7 +33,12 @@ export default function MaterialForm() {
   });
 
   async function onSubmit(materialInputValues: MaterialFormData) {
-    await createMaterialAction(materialInputValues);
+    const result = await createMaterialAction(materialInputValues);
+    alert(result.message);
+    if (result.success) {
+      hookForm.reset();
+      router.refresh();
+    }
   }
 
   return (

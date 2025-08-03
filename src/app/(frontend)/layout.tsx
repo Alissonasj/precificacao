@@ -32,13 +32,13 @@ export default function RootLayout({
         <header>
           <menu className='pb-5 space-x-2.5'>
             <Link href='/'>
-              <Button variant={'outline'}>Home</Button>
+              <Button variant={'outline'}>Início</Button>
             </Link>
             <Link href='/materials'>
-              <Button variant={'outline'}>Materials</Button>
+              <Button variant={'outline'}>Materiais</Button>
             </Link>
             <Link href='/bags'>
-              <Button variant={'outline'}>Bags</Button>
+              <Button variant={'outline'}>Bolsas</Button>
             </Link>
           </menu>
         </header>

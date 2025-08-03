@@ -9,6 +9,7 @@ import {
 } from './types/material';
 import { PrecificationFormData } from './types/precification';
 
+//Materials Actions
 export async function createMaterialAction(
   materialInputValues: MaterialFormData
 ) {
@@ -23,7 +24,19 @@ export async function createMaterialAction(
 
   const responseData = await response.json();
 
-  return responseData;
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'O Material foi criado com sucesso.'
+  };
 }
 
 export async function getAllMaterialsAction() {
@@ -42,6 +55,30 @@ export async function getOneMaterialAction(materialName: string) {
   return responseData[0];
 }
 
+export async function deleteMaterialAction(materialId: string) {
+  const response = await fetch('http://localhost:3000/api/v1/materials', {
+    method: 'DELETE',
+    body: JSON.stringify({ id: materialId })
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'O Material foi deletado.'
+  };
+}
+
+//Material Groups Actions
 export async function createMaterialGroupAction(
   materialGroupInputValues: MaterialGroupFormData
 ) {
@@ -52,7 +89,19 @@ export async function createMaterialGroupAction(
 
   const responseData = await response.json();
 
-  return responseData;
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'O Grupo de Material foi criado com sucesso.'
+  };
 }
 
 export async function getAllMaterialGroupsAction() {
@@ -62,6 +111,7 @@ export async function getAllMaterialGroupsAction() {
   return responseData;
 }
 
+//Bags Actions
 export async function getOneBagAction(bagName: string) {
   const response = await fetch(`http://localhost:3000/api/v1/bags/${bagName}`);
   const responseData: BagSelectDatabase[] = await response.json();
@@ -88,9 +138,45 @@ export async function createBagAction(bagInputValues: BagFormData) {
 
   const responseData = await response.json();
 
-  return responseData;
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'A Bolsa foi criada com sucesso.'
+  };
 }
 
+export async function deleteBagAction(bagId: string) {
+  const response = await fetch('http://localhost:3000/api/v1/bags', {
+    method: 'DELETE',
+    body: JSON.stringify({ id: bagId })
+  });
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'A Bolsa foi deletada.'
+  };
+}
+
+//Precification Actions
 export async function createPrecificationAction(
   precificationInputValues: PrecificationFormData,
   bgName: string,

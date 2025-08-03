@@ -1,7 +1,8 @@
-'use client';
-
-import { createBagAction } from '@/actions';
-import { BagFormData, bagFormSchema } from '@/types/bag';
+import { createMaterialGroupAction } from '@/actions';
+import {
+  MaterialGroupFormData,
+  materialGroupFormSchema
+} from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/button';
 import {
@@ -14,22 +15,19 @@ import {
 } from '@ui/form';
 import { Input } from '@ui/input';
 import { useRouter } from 'next/navigation';
-
 import { useForm } from 'react-hook-form';
 
-export default function BagForm() {
-  const hookForm = useForm<BagFormData>({
-    resolver: zodResolver(bagFormSchema),
+export default function MaterialGroupForm() {
+  const router = useRouter();
+  const hookForm = useForm<MaterialGroupFormData>({
+    resolver: zodResolver(materialGroupFormSchema),
     defaultValues: {
-      name: '',
-      hoursWorked: '',
-      suggestedPrice: 0
+      name: ''
     }
   });
-  const router = useRouter();
 
-  async function onSubmit(bagInputValues: BagFormData) {
-    const result = await createBagAction(bagInputValues);
+  async function onSubmit(materialGroupInputValues: MaterialGroupFormData) {
+    const result = await createMaterialGroupAction(materialGroupInputValues);
     alert(result.message);
     if (result.success) {
       hookForm.reset();
@@ -48,27 +46,11 @@ export default function BagForm() {
           name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nome da bolsa</FormLabel>
+              <FormLabel>Grupo</FormLabel>
               <FormControl>
                 <Input
+                  placeholder='Digite o nome do grupo'
                   type='text'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={hookForm.control}
-          name='hoursWorked'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Horas trabalhadas</FormLabel>
-              <FormControl>
-                <Input
-                  type='number'
                   {...field}
                 />
               </FormControl>

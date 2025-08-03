@@ -1,5 +1,3 @@
-'use client';
-
 import { getAllMaterialGroupsAction } from '@/actions';
 import { MaterialGroupSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/form';
@@ -18,7 +16,7 @@ type MaterialGroupsSelectProps = {
   defaultValue?: string;
 };
 
-export function MaterialGroupsSelect({
+export default function MaterialGroupsSelect({
   onValueChange,
   defaultValue
 }: MaterialGroupsSelectProps) {
