@@ -36,7 +36,7 @@ export default function MaterialList({
                 <li>Atualizado em: {m.updatedAt.toString()}</li>
                 <li>Tipo de cálculo: {m.calculationType}</li>
               </ul>
-              <DeleteButton id={m.id!} />
+              <DeleteButton id={m.id} />
             </CardContent>
           </Card>
         );

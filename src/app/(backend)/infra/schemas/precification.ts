@@ -1,7 +1,7 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const precificationsTable = pgTable('bags_materials', {
-  id: uuid().defaultRandom().primaryKey(),
+  id: uuid().defaultRandom().primaryKey().notNull(),
   layers: numeric('layers', { mode: 'number' }),
   unity: numeric('unity', { mode: 'number' }),
   width: numeric('width', { mode: 'number' }),

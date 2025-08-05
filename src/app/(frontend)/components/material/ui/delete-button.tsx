@@ -2,6 +2,7 @@
 
 import { deleteMaterialAction } from '@/actions';
 import { Button } from '@ui/shadcn/button';
+import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function DeleteButton({ id }: { id: string }) {
@@ -13,5 +14,12 @@ export default function DeleteButton({ id }: { id: string }) {
     router.push('/materials');
   }
 
-  return <Button onClick={() => deleteMaterial(id)}>Apagar</Button>;
+  return (
+    <Button
+      onClick={() => deleteMaterial(id)}
+      variant={'destructive'}
+    >
+      <Trash2Icon />
+    </Button>
+  );
 }

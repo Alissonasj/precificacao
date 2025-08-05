@@ -34,7 +34,7 @@ export default async function MaterialDetails({ params }: MaterialProps) {
             <li>Atualizado em: {material.updatedAt.toString()}</li>
             <li>Tipo de cálculo: {material.calculationType}</li>
           </ul>
-          <DeleteButton id={material.id!} />
+          <DeleteButton id={material.id} />
         </CardContent>
       </Card>
     </div>

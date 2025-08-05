@@ -1,7 +1,7 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const materialsTable = pgTable('materials', {
-  id: uuid().defaultRandom().unique(),
+  id: uuid().defaultRandom().unique().notNull(),
   name: text('name').primaryKey(),
   price: numeric({ mode: 'number' }).notNull(),
   calculationType: text('calculation_type').notNull(),

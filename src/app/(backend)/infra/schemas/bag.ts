@@ -1,7 +1,7 @@
 import { numeric, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const bagsTable = pgTable('bags', {
-  id: uuid().defaultRandom().unique(),
+  id: uuid().defaultRandom().unique().notNull(),
   name: text('name').primaryKey(),
   suggestedPrice: numeric('suggested_price', { mode: 'number' }),
   hoursWorked: numeric('hours_worked', { mode: 'number' }).notNull(),

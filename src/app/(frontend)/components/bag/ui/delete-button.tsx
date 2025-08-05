@@ -2,6 +2,7 @@
 
 import { deleteBagAction } from '@/actions';
 import { Button } from '@ui/shadcn/button';
+import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function DeleteButton({ id }: { id: string }) {
@@ -13,5 +14,12 @@ export default function DeleteButton({ id }: { id: string }) {
     route.push('/bags');
   }
 
-  return <Button onClick={() => deleteBag(id)}>Apagar</Button>;
+  return (
+    <Button
+      onClick={() => deleteBag(id)}
+      variant={'destructive'}
+    >
+      <Trash2Icon />
+    </Button>
+  );
 }

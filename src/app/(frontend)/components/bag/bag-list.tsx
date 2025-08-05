@@ -28,7 +28,7 @@ export default function BagList({ bags }: { bags: BagSelectDatabase[] }) {
                 <li>Criado em: {b.createdAt.toString()}</li>
                 <li>Atualizado em: {b.updatedAt.toString()}</li>
               </ul>
-              <DeleteButton id={b.id!} />
+              <DeleteButton id={b.id} />
             </CardContent>
           </Card>
         );
