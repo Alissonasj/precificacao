@@ -19,6 +19,7 @@ import {
 } from '@ui/shadcn/form';
 import { Input } from '@ui/shadcn/input';
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -51,9 +52,20 @@ export default function PrecificationForm({
   const [calculationType, setCalculationType] = useState<{
     [key: number]: string;
   }>({});
+  const router = useRouter();
 
   async function onSubmit(formInputValues: PrecificationFormData) {
-    await createPrecificationAction(formInputValues, bagName, hoursWorked);
+    const result = await createPrecificationAction(
+      formInputValues,
+      bagName,
+      hoursWorked
+    );
+    alert(result.message);
+    if (result.success) {
+      hookForm.reset();
+      hookFields.remove();
+      router.refresh();
+    }
   }
 
   async function handleChange(materialName: string, index: number) {

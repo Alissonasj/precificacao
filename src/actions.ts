@@ -195,5 +195,17 @@ export async function createPrecificationAction(
 
   const responseData = await response.json();
 
-  return responseData;
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'A Precificação foi criada com sucesso.'
+  };
 }
