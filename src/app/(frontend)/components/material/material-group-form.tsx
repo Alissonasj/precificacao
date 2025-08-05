@@ -59,7 +59,7 @@ export default function MaterialGroupForm() {
           )}
         />
 
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>Cadastrar</Button>
       </form>
     </Form>
   );

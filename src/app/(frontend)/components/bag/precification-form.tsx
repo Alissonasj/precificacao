@@ -18,6 +18,7 @@ import {
   FormMessage
 } from '@ui/shadcn/form';
 import { Input } from '@ui/shadcn/input';
+import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
@@ -179,9 +180,10 @@ export default function PrecificationForm({
 
               <Button
                 type='button'
+                variant={'destructive'}
                 onClick={() => hookFields.remove(index)}
               >
-                Remove
+                <MinusCircleIcon />
               </Button>
             </section>
           );
@@ -201,9 +203,14 @@ export default function PrecificationForm({
               })
             }
           >
-            Add
+            <PlusCircleIcon />
           </Button>
-          <Button type='submit'>Submit</Button>
+          <Button
+            type='submit'
+            variant={'outline'}
+          >
+            Precificar
+          </Button>
         </div>
       </form>
     </Form>

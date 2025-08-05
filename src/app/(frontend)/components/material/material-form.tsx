@@ -176,7 +176,7 @@ export default function MaterialForm() {
             />
           </div>
         </div>
-        <Button type='submit'>Submit</Button>
+        <Button type='submit'>Cadastrar</Button>
       </form>
     </Form>
   );

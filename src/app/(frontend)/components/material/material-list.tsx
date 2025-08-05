@@ -1,8 +1,4 @@
-'use client';
-
-import { deleteMaterialAction } from '@/actions';
 import { MaterialSelectDatabase } from '@/types/material';
-import { Button } from '@ui/shadcn/button';
 import {
   Card,
   CardContent,
@@ -11,21 +7,13 @@ import {
   CardTitle
 } from '@ui/shadcn/card';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import DeleteButton from './ui/delete-button';
 
 export default function MaterialList({
   materials
 }: {
   materials: MaterialSelectDatabase[];
 }) {
-  const route = useRouter();
-
-  async function deleteMaterial(materialId: string) {
-    const result = await deleteMaterialAction(materialId);
-    alert(result.message);
-    route.refresh();
-  }
-
   return (
     <div className='space-y-4 overflow-y-auto'>
       {materials?.map((m) => {
@@ -48,7 +36,7 @@ export default function MaterialList({
                 <li>Atualizado em: {m.updatedAt.toString()}</li>
                 <li>Tipo de cálculo: {m.calculationType}</li>
               </ul>
-              <Button onClick={() => deleteMaterial(m.id ?? '')}>Apagar</Button>
+              <DeleteButton id={m.id!} />
             </CardContent>
           </Card>
         );

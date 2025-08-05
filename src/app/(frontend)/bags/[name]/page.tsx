@@ -1,5 +1,6 @@
 import { getOneBagAction } from '@/actions';
 import PrecificationForm from '@components/bag/precification-form';
+import DeleteButton from '@components/bag/ui/delete-button';
 
 import {
   Card,
@@ -24,13 +25,15 @@ export default async function BagDetails({ params }: BagDetailsProps) {
         </h1>
         <CardDescription>{bag.id}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div>Preço: {bag.suggestedPrice}</div>
-        <div>Horas trabalhadas: {bag.hoursWorked}</div>
-        <div>Criada em: {bag.createdAt.toString()}</div>
-        <div>Atualizado em: {bag.updatedAt.toString()}</div>
+      <CardContent className='flex justify-between'>
+        <ul>
+          <li>Preço: {bag.suggestedPrice}</li>
+          <li>Horas trabalhadas: {bag.hoursWorked}</li>
+          <li>Criada em: {bag.createdAt.toString()}</li>
+          <li>Atualizado em: {bag.updatedAt.toString()}</li>
+        </ul>
+        <DeleteButton id={bag.id!} />
       </CardContent>
-
       <PrecificationForm
         bagName={bag.name}
         hoursWorked={bag.hoursWorked}

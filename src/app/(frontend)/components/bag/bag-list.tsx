@@ -1,8 +1,4 @@
-'use client';
-
-import { deleteBagAction } from '@/actions';
 import { BagSelectDatabase } from '@/types/bag';
-import { Button } from '@ui/shadcn/button';
 import {
   Card,
   CardContent,
@@ -11,17 +7,9 @@ import {
   CardTitle
 } from '@ui/shadcn/card';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import DeleteButton from './ui/delete-button';
 
 export default function BagList({ bags }: { bags: BagSelectDatabase[] }) {
-  const route = useRouter();
-
-  async function deleteBag(id: string) {
-    const result = await deleteBagAction(id);
-    alert(result.message);
-    route.refresh();
-  }
-
   return (
     <div className='space-y-4 overflow-y-auto'>
       {bags?.map((b) => {
@@ -40,7 +28,7 @@ export default function BagList({ bags }: { bags: BagSelectDatabase[] }) {
                 <li>Criado em: {b.createdAt.toString()}</li>
                 <li>Atualizado em: {b.updatedAt.toString()}</li>
               </ul>
-              <Button onClick={() => deleteBag(b.id ?? '')}>Apagar</Button>
+              <DeleteButton id={b.id!} />
             </CardContent>
           </Card>
         );
