@@ -1,5 +1,4 @@
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
-import { compareObjectsByKeys } from '@/lib/utils';
 import {
   MaterialInsertDatabase,
   MaterialSelectDatabase
@@ -11,26 +10,12 @@ import { eq, sql } from 'drizzle-orm';
 async function create(materialInputValues: MaterialInsertDatabase) {
   await validateUniqueMaterial(materialInputValues.name);
 
-  try {
-    const createdMaterial = await database.client
-      .insert(materialsTable)
-      .values(materialInputValues)
-      .returning();
+  const createdMaterial = await database.client
+    .insert(materialsTable)
+    .values(materialInputValues)
+    .returning();
 
-    return createdMaterial[0];
-  } catch (error) {
-    throw new ValidationError({ cause: error });
-  }
-
-  async function validateUniqueMaterial(materialName: string) {
-    const result = await findByMaterialName(materialName);
-
-    if (result.length > 0)
-      throw new ValidationError({
-        message: 'O material informado já foi cadastrado.',
-        action: 'Utilize outro nome para cadastrar.'
-      });
-  }
+  return createdMaterial[0];
 }
 
 async function findByMaterialName(materialName: string) {
@@ -62,21 +47,7 @@ async function findOneById(id: string) {
 }
 
 async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
-  const registeredMaterial = await findByMaterialName(
-    updatedMaterialInputValues.name
-  );
-
-  const keysToCompare = ['name', 'price', 'baseWidth', 'fkGroup'] as const;
-
-  const areEqual = compareObjectsByKeys(
-    updatedMaterialInputValues,
-    registeredMaterial[0],
-    keysToCompare
-  );
-
-  if (areEqual) {
-    return { message: 'Nenhuma alteração a ser feita.' };
-  }
+  await validateUniqueMaterial(updatedMaterialInputValues.name);
 
   const result = await database.client
     .update(materialsTable)
@@ -84,7 +55,7 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
       ...updatedMaterialInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(materialsTable.name, updatedMaterialInputValues.name))
+    .where(eq(materialsTable.id, updatedMaterialInputValues.id))
     .returning();
 
   return result[0];
@@ -103,6 +74,16 @@ async function deleteById({ id }: { id: string }) {
       cause: error
     });
   }
+}
+
+async function validateUniqueMaterial(materialName: string) {
+  const result = await findByMaterialName(materialName);
+
+  if (result.length > 0)
+    throw new ValidationError({
+      message: 'O material informado já foi cadastrado.',
+      action: 'Utilize outro nome para cadastrar.'
+    });
 }
 
 const material = {

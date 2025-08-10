@@ -1,4 +1,5 @@
 import { getOneMaterialAction } from '@/actions';
+import EditDialog from '@components/material/edit-dialog';
 import DeleteButton from '@components/material/ui/delete-button';
 import {
   Card,
@@ -34,7 +35,10 @@ export default async function MaterialDetails({ params }: MaterialProps) {
             <li>Atualizado em: {material.updatedAt.toString()}</li>
             <li>Tipo de cálculo: {material.calculationType}</li>
           </ul>
-          <DeleteButton id={material.id} />
+          <div className='flex gap-2.5'>
+            <EditDialog materialObject={material} />
+            <DeleteButton id={material.id} />
+          </div>
         </CardContent>
       </Card>
     </div>

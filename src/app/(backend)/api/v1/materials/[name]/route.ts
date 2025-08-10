@@ -19,22 +19,24 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const url = request.nextUrl;
-  const finalUrl = url.pathname.replace('/api/v1/materials/', '');
   const requestData = await request.json();
   const updatedMaterialInputValues = {
-    ...requestData,
-    id: finalUrl
+    ...requestData
   };
 
-  const updatedMaterial = await material.update(updatedMaterialInputValues);
+  try {
+    const updatedMaterial = await material.update(updatedMaterialInputValues);
 
-  return NextResponse.json(updatedMaterial);
+    return NextResponse.json(updatedMaterial);
+  } catch (error) {
+    return errorHandler(error);
+  }
 }
 
 export async function DELETE(request: NextRequest) {
+  const requestData = await request.json();
+
   try {
-    const requestData = await request.json();
     const deletedMaterial = await material.deleteById(requestData);
 
     return NextResponse.json(deletedMaterial);

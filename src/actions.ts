@@ -1,5 +1,6 @@
 'use server';
 
+import { compareObjectsByKeys } from './lib/utils';
 import { BagFormData, BagSelectDatabase } from './types/bag';
 import {
   MaterialFormData,
@@ -15,11 +16,7 @@ export async function createMaterialAction(
 ) {
   const response = await fetch('http://localhost:3000/api/v1/materials', {
     method: 'POST',
-    body: JSON.stringify({
-      ...materialInputValues,
-      baseWidth: Number(materialInputValues.baseWidth),
-      price: Number(materialInputValues.price)
-    })
+    body: JSON.stringify(materialInputValues)
   });
 
   const responseData = await response.json();
@@ -75,6 +72,70 @@ export async function deleteMaterialAction(materialId: string) {
     success: true,
     action: '',
     message: 'O Material foi deletado.'
+  };
+}
+
+export async function updateMaterialAction(
+  material: MaterialFormData,
+  id: string
+) {
+  const registeredMaterial = await getOneMaterialAction(material.name);
+
+  if (registeredMaterial) {
+    const keysToCompare = [
+      'name',
+      'price',
+      'baseWidth',
+      'fkGroup',
+      'calculationType'
+    ] as const;
+
+    const registeredMaterialForCompare = {
+      ...registeredMaterial,
+      price: registeredMaterial.price.toString(),
+      baseWidth:
+        registeredMaterial.baseWidth !== null
+          ? registeredMaterial.baseWidth.toString()
+          : undefined
+    };
+
+    const areEqual = compareObjectsByKeys(
+      material,
+      registeredMaterialForCompare,
+      keysToCompare
+    );
+
+    if (areEqual) {
+      return {
+        success: false,
+        action: '',
+        message: 'Nenhuma alteração a ser feita.'
+      };
+    }
+  }
+
+  const response = await fetch(
+    `http://localhost:3000/api/v1/materials/${material.name}`,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...material, id })
+    }
+  );
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'O Material foi atualizado com sucesso.'
   };
 }
 
