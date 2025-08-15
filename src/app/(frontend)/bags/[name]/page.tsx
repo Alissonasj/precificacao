@@ -1,4 +1,6 @@
 import { getOneBagAction } from '@/actions';
+import EditDialog from '@components/bag/edit-dialog';
+import EditForm from '@components/bag/edit-form';
 import PrecificationDialog from '@components/bag/precification-dialog';
 import PrecificationForm from '@components/bag/precification-form';
 import DeleteButton from '@components/bag/ui/delete-button';
@@ -40,6 +42,9 @@ export default async function BagDetails({ params }: BagDetailsProps) {
               hoursWorked={bag.hoursWorked}
             />
           </PrecificationDialog>
+          <EditDialog title='Edite a Bolsa'>
+            <EditForm bagObject={bag} />
+          </EditDialog>
           <DeleteButton id={bag.id} />
         </div>
       </CardContent>
