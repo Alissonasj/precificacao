@@ -1,4 +1,3 @@
-import { MaterialSelectDatabase } from '@/types/material';
 import { Button } from '@ui/shadcn/button';
 import {
   Dialog,
@@ -8,13 +7,14 @@ import {
   DialogTrigger
 } from '@ui/shadcn/dialog';
 import { PenIcon } from 'lucide-react';
-import EditForm from './edit-form';
+import React from 'react';
 
 type EditDialogProps = {
-  materialObject: MaterialSelectDatabase;
+  children?: React.ReactNode;
+  title?: React.ReactNode;
 };
 
-export default function EditDialog({ materialObject }: EditDialogProps) {
+export default function EditDialog({ title, children }: EditDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -24,11 +24,9 @@ export default function EditDialog({ materialObject }: EditDialogProps) {
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
-          <DialogTitle>Edite o Material</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className='grid gap-4 py-4'>
-          <EditForm materialObject={materialObject} />
-        </div>
+        <div className='grid gap-4 py-4'>{children}</div>
       </DialogContent>
     </Dialog>
   );

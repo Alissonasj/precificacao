@@ -1,32 +1,28 @@
-import { compareObjectsByKeys } from '@/lib/utils';
 import { BagInsertDatabase, BagSelectDatabase } from '@/types/bag';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { bagsTable } from '@db_schemas/bag';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, ne, sql } from 'drizzle-orm';
 
 async function create(bagInputValues: BagInsertDatabase) {
-  await validateUniqueBag(bagInputValues.name);
+  await existsBag(bagInputValues.name);
 
-  try {
-    const createdBag = await database.client
-      .insert(bagsTable)
-      .values(bagInputValues)
-      .returning();
+  const createdBag = await database.client
+    .insert(bagsTable)
+    .values(bagInputValues)
+    .returning();
 
-    return createdBag[0];
-  } catch (error) {
-    throw new ValidationError({ cause: error });
-  }
+  return createdBag[0];
 
-  async function validateUniqueBag(bagName: string) {
-    const result = await findByBagName(bagName);
+  async function existsBag(bagName: string) {
+    const result = await findOneByName(bagName);
 
-    if (result.length > 0)
+    if (result) {
       throw new ValidationError({
         message: 'A bolsa informada já foi cadastrada.',
         action: 'Utilize outro nome para cadastrar.'
       });
+    }
   }
 }
 
@@ -58,20 +54,21 @@ async function findOneById(id: string) {
   }
 }
 
-async function update(updatedBagInputValues: BagSelectDatabase) {
-  const registeredBag = await findByBagName(updatedBagInputValues.name);
+async function findOneByName(bagName: string) {
+  try {
+    const bagFound = await database.client
+      .select()
+      .from(bagsTable)
+      .where(eq(sql`LOWER(${bagsTable.name})`, bagName.toLocaleLowerCase()));
 
-  const keysToCompare = ['name', 'hoursWorked', 'suggestedPrice'] as const;
-
-  const areEqual = compareObjectsByKeys(
-    updatedBagInputValues,
-    registeredBag[0],
-    keysToCompare
-  );
-
-  if (areEqual) {
-    return { message: 'Nenhuma alteração a ser feita.' };
+    return bagFound[0];
+  } catch (error) {
+    throw new NotFoundError({ message: 'Bolsa não encontrada.', cause: error });
   }
+}
+
+async function update(updatedBagInputValues: BagSelectDatabase) {
+  await validateUniqueBag(updatedBagInputValues.name, updatedBagInputValues.id);
 
   const result = await database.client
     .update(bagsTable)
@@ -79,7 +76,7 @@ async function update(updatedBagInputValues: BagSelectDatabase) {
       ...updatedBagInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(bagsTable.name, updatedBagInputValues.name))
+    .where(eq(bagsTable.id, updatedBagInputValues.id))
     .returning();
 
   return result[0];
@@ -100,12 +97,27 @@ async function deleteById({ id }: { id: string }) {
   }
 }
 
+async function validateUniqueBag(bagName: string, id: string) {
+  const [result] = await database.client
+    .select()
+    .from(bagsTable)
+    .where(and(eq(bagsTable.name, bagName), ne(bagsTable.id, id)))
+    .limit(1);
+
+  if (result)
+    throw new ValidationError({
+      message: 'A bolsa informada já foi cadastrada.',
+      action: 'Utilize outro nome para cadastrar.'
+    });
+}
+
 const bag = {
   update,
   findByBagName,
   findOneById,
   deleteById,
   findAll,
+  findOneByName,
   create
 };
 

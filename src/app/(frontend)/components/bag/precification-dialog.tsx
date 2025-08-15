@@ -19,7 +19,7 @@ export default function PrecificationDialog({
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] max-h-[80vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle>Adicione um novo Grupo</DialogTitle>
+          <DialogTitle>Precificação</DialogTitle>
         </DialogHeader>
         {children}
       </DialogContent>

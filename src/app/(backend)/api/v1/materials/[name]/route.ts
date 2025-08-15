@@ -8,11 +8,9 @@ export async function GET(request: NextRequest) {
   const materialNameNormalized = decodeURIComponent(finalUrl);
 
   try {
-    const materialFound = await material.findByMaterialName(
-      materialNameNormalized
-    );
+    const result = await material.findByMaterialName(materialNameNormalized);
 
-    return NextResponse.json(materialFound);
+    return NextResponse.json(result);
   } catch (error) {
     return errorHandler(error);
   }
@@ -20,14 +18,11 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const requestData = await request.json();
-  const updatedMaterialInputValues = {
-    ...requestData
-  };
 
   try {
-    const updatedMaterial = await material.update(updatedMaterialInputValues);
+    const result = await material.update(requestData);
 
-    return NextResponse.json(updatedMaterial);
+    return NextResponse.json(result);
   } catch (error) {
     return errorHandler(error);
   }
@@ -37,9 +32,9 @@ export async function DELETE(request: NextRequest) {
   const requestData = await request.json();
 
   try {
-    const deletedMaterial = await material.deleteById(requestData);
+    const result = await material.deleteById(requestData);
 
-    return NextResponse.json(deletedMaterial);
+    return NextResponse.json(result);
   } catch (error) {
     return errorHandler(error);
   }

@@ -5,10 +5,10 @@ import {
 } from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, ne, sql } from 'drizzle-orm';
 
 async function create(materialInputValues: MaterialInsertDatabase) {
-  await validateUniqueMaterial(materialInputValues.name);
+  await existsMaterial(materialInputValues.name);
 
   const createdMaterial = await database.client
     .insert(materialsTable)
@@ -16,6 +16,17 @@ async function create(materialInputValues: MaterialInsertDatabase) {
     .returning();
 
   return createdMaterial[0];
+
+  async function existsMaterial(materialName: string) {
+    const result = await findOneByName(materialName);
+
+    if (result) {
+      throw new ValidationError({
+        message: 'O material informado já foi cadastrado.',
+        action: 'Utilize outro nome para cadastrar.'
+      });
+    }
+  }
 }
 
 async function findByMaterialName(materialName: string) {
@@ -46,8 +57,29 @@ async function findOneById(id: string) {
   }
 }
 
+async function findOneByName(materialName: string) {
+  try {
+    const materialFound = await database.client
+      .select()
+      .from(materialsTable)
+      .where(
+        eq(sql`LOWER(${materialsTable.name})`, materialName.toLocaleLowerCase())
+      );
+
+    return materialFound[0];
+  } catch (error) {
+    throw new NotFoundError({
+      message: 'Material não encontrado.',
+      cause: error
+    });
+  }
+}
+
 async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
-  await validateUniqueMaterial(updatedMaterialInputValues.name);
+  await validateUniqueMaterial(
+    updatedMaterialInputValues.name,
+    updatedMaterialInputValues.id
+  );
 
   const result = await database.client
     .update(materialsTable)
@@ -76,10 +108,16 @@ async function deleteById({ id }: { id: string }) {
   }
 }
 
-async function validateUniqueMaterial(materialName: string) {
-  const result = await findByMaterialName(materialName);
+async function validateUniqueMaterial(materialName: string, id: string) {
+  const [result] = await database.client
+    .select()
+    .from(materialsTable)
+    .where(
+      and(eq(materialsTable.name, materialName), ne(materialsTable.id, id))
+    )
+    .limit(1);
 
-  if (result.length > 0)
+  if (result)
     throw new ValidationError({
       message: 'O material informado já foi cadastrado.',
       action: 'Utilize outro nome para cadastrar.'
@@ -90,6 +128,7 @@ const material = {
   update,
   findByMaterialName,
   findOneById,
+  findOneByName,
   deleteById,
   findAll,
   create

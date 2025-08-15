@@ -48,7 +48,7 @@ export default function EditForm({ materialObject }: EditFormProps) {
     alert(`${result.message}\n${result.action}`);
     if (result.success) {
       hookForm.reset();
-      router.push(`/materials/${materialInputValues.name}`);
+      router.push(`/materials/${materialInputValues.name.toLocaleLowerCase()}`);
     }
   }
 

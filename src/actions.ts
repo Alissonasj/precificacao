@@ -1,6 +1,6 @@
 'use server';
 
-import { compareObjectsByKeys } from './lib/utils';
+import precification from '@backend/models/precification';
 import { BagFormData, BagSelectDatabase } from './types/bag';
 import {
   MaterialFormData,
@@ -79,41 +79,6 @@ export async function updateMaterialAction(
   material: MaterialFormData,
   id: string
 ) {
-  const registeredMaterial = await getOneMaterialAction(material.name);
-
-  if (registeredMaterial) {
-    const keysToCompare = [
-      'name',
-      'price',
-      'baseWidth',
-      'fkGroup',
-      'calculationType'
-    ] as const;
-
-    const registeredMaterialForCompare = {
-      ...registeredMaterial,
-      price: registeredMaterial.price.toString(),
-      baseWidth:
-        registeredMaterial.baseWidth !== null
-          ? registeredMaterial.baseWidth.toString()
-          : undefined
-    };
-
-    const areEqual = compareObjectsByKeys(
-      material,
-      registeredMaterialForCompare,
-      keysToCompare
-    );
-
-    if (areEqual) {
-      return {
-        success: false,
-        action: '',
-        message: 'Nenhuma alteração a ser feita.'
-      };
-    }
-  }
-
   const response = await fetch(
     `http://localhost:3000/api/v1/materials/${material.name}`,
     {
@@ -237,6 +202,32 @@ export async function deleteBagAction(bagId: string) {
   };
 }
 
+export async function updateBagAction(bagInputValues: BagFormData, id: string) {
+  const response = await fetch(
+    `http://localhost:3000/api/v1/bags/${bagInputValues.name}`,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ ...bagInputValues, id })
+    }
+  );
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    return {
+      success: false,
+      action: responseData.action,
+      message: responseData.message
+    };
+  }
+
+  return {
+    success: true,
+    action: '',
+    message: 'A bolsa foi atualizada.'
+  };
+}
+
 //Precification Actions
 export async function createPrecificationAction(
   precificationInputValues: PrecificationFormData,
@@ -269,4 +260,10 @@ export async function createPrecificationAction(
     action: '',
     message: 'A Precificação foi criada com sucesso.'
   };
+}
+
+export async function getUsedMaterialsAction(bagName: string) {
+  const result = await precification.getUsedMaterials(bagName);
+
+  return result;
 }
