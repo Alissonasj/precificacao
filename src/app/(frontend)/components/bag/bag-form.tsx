@@ -1,6 +1,6 @@
 'use client';
 
-import { createBagAction } from '@/actions';
+import { createBagAction } from '@/actions/bags-actions';
 import { BagFormData, bagFormSchema } from '@/types/bag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/shadcn/button';

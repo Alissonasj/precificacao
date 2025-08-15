@@ -1,6 +1,6 @@
 'use client';
 
-import { createMaterialAction } from '@/actions';
+import { createMaterialAction } from '@/actions/materials-actions';
 import { CalculationType } from '@/types/calculation-type';
 import { MaterialFormData, materialFormSchema } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';

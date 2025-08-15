@@ -1,6 +1,6 @@
 'use client';
 
-import { updateMaterialAction } from '@/actions';
+import { updateMaterialAction } from '@/actions/materials-actions';
 import { CalculationType } from '@/types/calculation-type';
 import {
   MaterialFormData,

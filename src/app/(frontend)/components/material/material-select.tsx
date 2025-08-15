@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllMaterialsAction } from '@/actions';
+import { getAllMaterialsAction } from '@/actions/materials-actions';
 import { MaterialSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {

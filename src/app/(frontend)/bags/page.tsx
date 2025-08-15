@@ -1,4 +1,4 @@
-import { getAllBagsAction } from '@/actions';
+import { getAllBagsAction } from '@/actions/bags-actions';
 import BagForm from '@components/bag/bag-form';
 import BagList from '@components/bag/bag-list';
 

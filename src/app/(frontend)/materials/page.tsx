@@ -1,4 +1,4 @@
-import { getAllMaterialsAction } from '@/actions';
+import { getAllMaterialsAction } from '@/actions/materials-actions';
 import MaterialForm from '@components/material/material-form';
 import MaterialList from '@components/material/material-list';
 

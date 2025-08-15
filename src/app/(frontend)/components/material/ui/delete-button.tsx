@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteMaterialAction } from '@/actions';
+import { deleteMaterialAction } from '@/actions/materials-actions';
 import { Button } from '@ui/shadcn/button';
 import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';

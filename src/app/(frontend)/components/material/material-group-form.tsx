@@ -1,4 +1,4 @@
-import { createMaterialGroupAction } from '@/actions';
+import { createMaterialGroupAction } from '@/actions/materials-actions';
 import {
   MaterialGroupFormData,
   materialGroupFormSchema

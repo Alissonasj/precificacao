@@ -1,4 +1,4 @@
-import { getOneMaterialAction } from '@/actions';
+import { getOneMaterialAction } from '@/actions/materials-actions';
 import EditDialog from '@components/material/edit-dialog';
 import EditForm from '@components/material/edit-form';
 import DeleteButton from '@components/material/ui/delete-button';

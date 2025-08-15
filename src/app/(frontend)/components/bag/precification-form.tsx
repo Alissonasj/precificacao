@@ -1,6 +1,7 @@
 'use client';
 
-import { createPrecificationAction, getOneMaterialAction } from '@/actions';
+import { getOneMaterialAction } from '@/actions/materials-actions';
+import { createPrecificationAction } from '@/actions/precification-actions';
 import { CalculationType } from '@/types/calculation-type';
 import {
   PrecificationFormData,

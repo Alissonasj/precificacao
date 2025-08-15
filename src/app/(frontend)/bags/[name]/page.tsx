@@ -1,4 +1,4 @@
-import { getOneBagAction } from '@/actions';
+import { getOneBagAction } from '@/actions/bags-actions';
 import EditDialog from '@components/bag/edit-dialog';
 import EditForm from '@components/bag/edit-form';
 import PrecificationDialog from '@components/bag/precification-dialog';

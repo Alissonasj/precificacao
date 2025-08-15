@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteBagAction } from '@/actions';
+import { deleteBagAction } from '@/actions/bags-actions';
 import { Button } from '@ui/shadcn/button';
 import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
