@@ -1,10 +1,11 @@
-import { getOneMaterialAction } from '@/actions';
 import { CalculationType } from '@/types/calculation-type';
 import { PrecificationInsertDatabase } from '@/types/precification';
 import { database } from '@backend/infra/database';
 import { ValidationError } from '@backend/infra/errors';
 import { precificationsTable } from '@db_schemas/precification';
+import { eq, sql } from 'drizzle-orm';
 import bag from './bag';
+import material from './material';
 
 async function create(
   bagMaterialsInpuntValues: PrecificationInsertDatabase[],
@@ -21,7 +22,7 @@ async function create(
 
   await Promise.all(
     bagMaterialsInpuntValues.map(async (bagMaterial) => {
-      const result = await getOneMaterialAction(bagMaterial.fkMaterial);
+      const result = await material.findOneByName(bagMaterial.fkMaterial);
 
       switch (result.calculationType) {
         case CalculationType.LENGTH_WIDTH:
@@ -75,8 +76,20 @@ async function create(
   }
 }
 
+async function getUsedMaterials(bagName: string) {
+  const result = await database.client
+    .select()
+    .from(precificationsTable)
+    .where(
+      eq(sql`LOWER(${precificationsTable.fkBag})`, bagName.toLocaleLowerCase())
+    );
+
+  return result;
+}
+
 const precification = {
-  create
+  create,
+  getUsedMaterials
 };
 
 export default precification;
