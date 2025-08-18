@@ -88,6 +88,7 @@ async function deleteById({ id }: { id: string }) {
       .delete(bagsTable)
       .where(eq(bagsTable.id, id))
       .returning();
+
     return deletedBag[0];
   } catch (error) {
     throw new NotFoundError({

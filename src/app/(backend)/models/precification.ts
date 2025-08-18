@@ -76,7 +76,7 @@ async function create(
   }
 }
 
-async function getUsedMaterials(bagName: string) {
+async function findUsedMaterials(bagName: string) {
   const result = await database.client
     .select()
     .from(precificationsTable)
@@ -87,9 +87,18 @@ async function getUsedMaterials(bagName: string) {
   return result;
 }
 
+async function deleteByBagName(bagName: string) {
+  await database.client
+    .delete(precificationsTable)
+    .where(
+      eq(sql`LOWER(${precificationsTable.fkBag})`, bagName.toLocaleLowerCase())
+    );
+}
+
 const precification = {
   create,
-  getUsedMaterials
+  findUsedMaterials,
+  deleteByBagName
 };
 
 export default precification;

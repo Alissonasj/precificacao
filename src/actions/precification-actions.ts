@@ -38,7 +38,7 @@ export async function createPrecificationAction(
 }
 
 export async function getUsedMaterialsAction(bagName: string) {
-  const result = await precification.getUsedMaterials(bagName);
+  const result = await precification.findUsedMaterials(bagName);
 
   return result;
 }
