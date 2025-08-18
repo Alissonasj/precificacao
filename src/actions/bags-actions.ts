@@ -1,5 +1,6 @@
 'use server';
 
+import { serverObject } from '@/lib/utils';
 import { BagFormData, BagSelectDatabase } from '@/types/bag';
 
 //Bags Actions
@@ -29,19 +30,11 @@ export async function createBagAction(bagInputValues: BagFormData) {
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
     message: 'A Bolsa foi criada com sucesso.'
-  };
+  });
 }
 
 export async function deleteBagAction(bagId: string) {
@@ -52,19 +45,11 @@ export async function deleteBagAction(bagId: string) {
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
-    message: 'A Bolsa foi deletada.'
-  };
+    message: 'A Bolsa foi deletada com sucesso.'
+  });
 }
 
 export async function updateBagAction(bagInputValues: BagFormData, id: string) {
@@ -78,17 +63,9 @@ export async function updateBagAction(bagInputValues: BagFormData, id: string) {
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
-    message: 'A bolsa foi atualizada.'
-  };
+    message: 'A Bolsa foi atualizada com sucesso.'
+  });
 }

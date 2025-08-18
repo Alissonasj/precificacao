@@ -1,5 +1,6 @@
 'use server';
 
+import { serverObject } from '@/lib/utils';
 import {
   MaterialFormData,
   MaterialGroupFormData,
@@ -18,19 +19,11 @@ export async function createMaterialAction(
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
     message: 'O Material foi criado com sucesso.'
-  };
+  });
 }
 
 export async function getAllMaterialsAction() {
@@ -57,19 +50,11 @@ export async function deleteMaterialAction(materialId: string) {
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
-    message: 'O Material foi deletado.'
-  };
+    message: 'O Material foi deletado com sucesso.'
+  });
 }
 
 export async function updateMaterialAction(
@@ -86,19 +71,11 @@ export async function updateMaterialAction(
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
     message: 'O Material foi atualizado com sucesso.'
-  };
+  });
 }
 
 //Material Groups Actions
@@ -112,19 +89,11 @@ export async function createMaterialGroupAction(
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
     message: 'O Grupo de Material foi criado com sucesso.'
-  };
+  });
 }
 
 export async function getAllMaterialGroupsAction() {

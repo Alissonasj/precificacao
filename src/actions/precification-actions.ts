@@ -1,5 +1,6 @@
 'use server';
 
+import { serverObject } from '@/lib/utils';
 import { PrecificationFormData } from '@/types/precification';
 import precification from '@backend/models/precification';
 
@@ -22,19 +23,11 @@ export async function createPrecificationAction(
 
   const responseData = await response.json();
 
-  if (!response.ok) {
-    return {
-      success: false,
-      action: responseData.action,
-      message: responseData.message
-    };
-  }
-
-  return {
-    success: true,
+  return serverObject(response.ok, {
+    data: responseData,
     action: '',
     message: 'A Precificação foi criada com sucesso.'
-  };
+  });
 }
 
 export async function getUsedMaterialsAction(bagName: string) {

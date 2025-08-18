@@ -12,3 +12,29 @@ export function compareObjectsByKeys<T>(
 ): boolean {
   return keysToCompare.every((key) => object1[key] === object2[key]);
 }
+
+type serverObjectProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+  action: string;
+  message: string;
+};
+
+export function serverObject(
+  isOk: boolean,
+  { data, action, message }: serverObjectProps
+) {
+  if (!isOk) {
+    return {
+      success: false,
+      action: data.action,
+      message: data.message
+    };
+  } else {
+    return {
+      success: true,
+      action,
+      message
+    };
+  }
+}
