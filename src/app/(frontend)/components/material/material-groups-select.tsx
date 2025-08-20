@@ -1,4 +1,4 @@
-import { getAllMaterialGroupsAction } from '@/actions/materials-actions';
+import { getAllMaterialGroupsAction } from '@/actions/actions';
 import { MaterialGroupSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {

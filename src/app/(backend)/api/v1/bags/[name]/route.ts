@@ -9,9 +9,15 @@ export async function GET(request: NextRequest) {
   const bagNameNormalized = decodeURIComponent(finalUrl);
 
   try {
-    const result = await bag.findByBagName(bagNameNormalized);
+    const bagsFound = await bag.findByBagName(bagNameNormalized);
+    const usedMaterialsFound = await precification.findUsedMaterials(
+      bagsFound[0].name
+    );
 
-    return NextResponse.json(result);
+    return NextResponse.json({
+      bag: bagsFound[0],
+      usedMaterials: usedMaterialsFound
+    });
   } catch (error) {
     return errorHandler(error);
   }
@@ -20,24 +26,9 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const result = await bag.update(requestData);
+    const resultObject = await bag.update(requestData);
 
-    return NextResponse.json(result);
-  } catch (error) {
-    return errorHandler(error);
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const requestData = await request.json();
-    const result = await bag.deleteById(requestData);
-
-    if (result) {
-      await precification.deleteByBagName(result.name);
-    }
-
-    return NextResponse.json(result);
+    return NextResponse.json(resultObject);
   } catch (error) {
     return errorHandler(error);
   }

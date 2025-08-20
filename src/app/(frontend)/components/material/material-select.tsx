@@ -1,6 +1,6 @@
 'use client';
 
-import { getAllMaterialsAction } from '@/actions/materials-actions';
+import { getAllMaterialsRequest } from '@/requests/material-requests';
 import { MaterialSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {
@@ -27,7 +27,7 @@ export default function MaterialSelect({
   >([]);
 
   async function fetchMaterials() {
-    const result = await getAllMaterialsAction();
+    const result = await getAllMaterialsRequest();
     setMaterialsOptions(result);
   }
 

@@ -13,28 +13,22 @@ export function compareObjectsByKeys<T>(
   return keysToCompare.every((key) => object1[key] === object2[key]);
 }
 
-type serverObjectProps = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any;
-  action: string;
-  message: string;
+type serverObjectReturnProps<T> = {
+  name?: string;
+  message?: string;
+  action?: string;
+  status_code?: number;
+  success?: boolean;
+  dataObject?: T;
 };
 
-export function serverObject(
-  isOk: boolean,
-  { data, action, message }: serverObjectProps
-) {
-  if (!isOk) {
-    return {
-      success: false,
-      action: data.action,
-      message: data.message
-    };
-  } else {
-    return {
-      success: true,
-      action,
-      message
-    };
-  }
+export function serverObjectReturn<T>(attributes: serverObjectReturnProps<T>) {
+  return {
+    name: attributes?.name || '',
+    message: attributes?.message || '',
+    action: attributes?.action || '',
+    status_code: attributes?.status_code || 200,
+    success: attributes?.success ?? true,
+    data: attributes?.dataObject
+  };
 }

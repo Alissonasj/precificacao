@@ -1,4 +1,4 @@
-import { getOneMaterialAction } from '@/actions/materials-actions';
+import { getOneMaterialRequest } from '@/requests/material-requests';
 import EditDialog from '@components/material/edit-dialog';
 import EditForm from '@components/material/edit-form';
 import DeleteButton from '@components/material/ui/delete-button';
@@ -16,7 +16,7 @@ type MaterialProps = {
 
 export default async function MaterialDetails({ params }: MaterialProps) {
   const { name } = await params;
-  const material = await getOneMaterialAction(name);
+  const material = await getOneMaterialRequest(name);
 
   return (
     <div>

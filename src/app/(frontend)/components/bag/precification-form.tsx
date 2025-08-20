@@ -1,7 +1,7 @@
 'use client';
 
-import { getOneMaterialAction } from '@/actions/materials-actions';
-import { createPrecificationAction } from '@/actions/precification-actions';
+import { getOneMaterialRequest } from '@/requests/material-requests';
+import { createPrecificationRequest } from '@/requests/precification-requests';
 import { CalculationType } from '@/types/calculation-type';
 import {
   PrecificationFormData,
@@ -56,7 +56,7 @@ export default function PrecificationForm({
   const router = useRouter();
 
   async function onSubmit(formInputValues: PrecificationFormData) {
-    const result = await createPrecificationAction(
+    const result = await createPrecificationRequest(
       formInputValues,
       bagName,
       hoursWorked
@@ -70,7 +70,7 @@ export default function PrecificationForm({
   }
 
   async function handleChange(materialName: string, index: number) {
-    const result = await getOneMaterialAction(materialName);
+    const result = await getOneMaterialRequest(materialName);
     hookForm.setValue(`materials.${index}.fkMaterial`, materialName);
     setCalculationType({ ...calculationType, [index]: result.calculationType });
   }

@@ -1,3 +1,4 @@
+import { serverObjectReturn } from '@/lib/utils';
 import { CalculationType } from '@/types/calculation-type';
 import { PrecificationInsertDatabase } from '@/types/precification';
 import { database } from '@backend/infra/database';
@@ -56,11 +57,10 @@ async function create(
   );
 
   try {
-    const createdPrecification = await database.client
+    await database.client
       .insert(precificationsTable)
       .values(bagMaterialsInpuntValues)
-      .onConflictDoNothing()
-      .returning();
+      .onConflictDoNothing();
 
     const suggestedPrice = calculatedPrice * totalPercentage;
     const result = await bag.findByBagName(bagMaterialsInpuntValues[0].fkBag);
@@ -70,7 +70,10 @@ async function create(
       suggestedPrice
     });
 
-    return createdPrecification;
+    return serverObjectReturn({
+      message: 'Precificação cadastrada com sucesso.',
+      status_code: 201
+    });
   } catch (error) {
     throw new ValidationError({ cause: error });
   }
@@ -87,18 +90,22 @@ async function findUsedMaterials(bagName: string) {
   return result;
 }
 
-async function deleteByBagName(bagName: string) {
+async function deleteUsedMaterialsByBagName(bagName: string) {
   await database.client
     .delete(precificationsTable)
     .where(
       eq(sql`LOWER(${precificationsTable.fkBag})`, bagName.toLocaleLowerCase())
     );
+
+  return serverObjectReturn({
+    message: 'Materiais deletados com sucesso.'
+  });
 }
 
 const precification = {
   create,
   findUsedMaterials,
-  deleteByBagName
+  deleteUsedMaterialsByBagName
 };
 
 export default precification;

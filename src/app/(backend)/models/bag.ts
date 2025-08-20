@@ -1,3 +1,4 @@
+import { serverObjectReturn } from '@/lib/utils';
 import { BagInsertDatabase, BagSelectDatabase } from '@/types/bag';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
@@ -7,12 +8,12 @@ import { and, eq, ne, sql } from 'drizzle-orm';
 async function create(bagInputValues: BagInsertDatabase) {
   await existsBag(bagInputValues.name);
 
-  const createdBag = await database.client
-    .insert(bagsTable)
-    .values(bagInputValues)
-    .returning();
+  await database.client.insert(bagsTable).values(bagInputValues);
 
-  return createdBag[0];
+  return serverObjectReturn({
+    message: 'Bolsa cadastrada com sucesso.',
+    status_code: 201
+  });
 
   async function existsBag(bagName: string) {
     const result = await findOneByName(bagName);
@@ -70,32 +71,29 @@ async function findOneByName(bagName: string) {
 async function update(updatedBagInputValues: BagSelectDatabase) {
   await validateUniqueBag(updatedBagInputValues.name, updatedBagInputValues.id);
 
-  const result = await database.client
+  await database.client
     .update(bagsTable)
     .set({
       ...updatedBagInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(bagsTable.id, updatedBagInputValues.id))
-    .returning();
+    .where(eq(bagsTable.id, updatedBagInputValues.id));
 
-  return result[0];
+  return serverObjectReturn({
+    message: 'Bolsa atualizada com sucesso.'
+  });
 }
 
-async function deleteById({ id }: { id: string }) {
-  try {
-    const deletedBag = await database.client
-      .delete(bagsTable)
-      .where(eq(bagsTable.id, id))
-      .returning();
+async function deleteById(id: string) {
+  const result = await database.client
+    .delete(bagsTable)
+    .where(eq(bagsTable.id, id))
+    .returning();
 
-    return deletedBag[0];
-  } catch (error) {
-    throw new NotFoundError({
-      message: 'A Bolsa não pode ser deletada.',
-      cause: error
-    });
-  }
+  return serverObjectReturn({
+    message: 'Bolsa deletada com sucesso.',
+    dataObject: result[0]
+  });
 }
 
 async function validateUniqueBag(bagName: string, id: string) {

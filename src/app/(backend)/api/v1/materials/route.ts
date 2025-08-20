@@ -31,7 +31,9 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const deletedMaterial = await material.deleteById(requestData);
+    console.log('REQUESTDATA', requestData);
+
+    const deletedMaterial = await material.deleteById(requestData.materialId);
 
     return NextResponse.json(deletedMaterial);
   } catch (error) {

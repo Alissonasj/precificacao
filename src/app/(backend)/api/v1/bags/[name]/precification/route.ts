@@ -6,9 +6,12 @@ export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
 
-    await precification.create(requestData.materials, requestData.hoursWorked);
+    const resultObject = await precification.create(
+      requestData.materials,
+      requestData.hoursWorked
+    );
 
-    return NextResponse.json(requestData);
+    return NextResponse.json(resultObject);
   } catch (error) {
     return errorHandler(error);
   }

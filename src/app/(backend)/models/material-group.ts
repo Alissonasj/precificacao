@@ -1,3 +1,4 @@
+import { serverObjectReturn } from '@/lib/utils';
 import { MaterialGroupInsertDatabase } from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
@@ -7,16 +8,12 @@ import { eq, sql } from 'drizzle-orm';
 async function create(materialGroups: MaterialGroupInsertDatabase) {
   await validateUniqueGroup(materialGroups.name);
 
-  try {
-    const createdGroup = await database.client
-      .insert(materialGroupsTable)
-      .values(materialGroups)
-      .returning();
+  await database.client.insert(materialGroupsTable).values(materialGroups);
 
-    return createdGroup[0];
-  } catch (error) {
-    throw new ValidationError({ cause: error });
-  }
+  return serverObjectReturn({
+    message: 'Grupo cadastrado com sucesso.',
+    status_code: 201
+  });
 
   async function validateUniqueGroup(groupName: string) {
     const result = await findByGroupName(groupName);
@@ -48,12 +45,13 @@ async function findByGroupName(groupName: string) {
 
 async function deleteById({ id }: { id: string }) {
   try {
-    const deletedMaterial = await database.client
+    await database.client
       .delete(materialGroupsTable)
-      .where(eq(materialGroupsTable.id, id))
-      .returning();
+      .where(eq(materialGroupsTable.id, id));
 
-    return deletedMaterial[0];
+    return serverObjectReturn({
+      message: 'Material deletado com sucesso.'
+    });
   } catch (error) {
     throw new NotFoundError({
       message: 'O material não foi deletado.',

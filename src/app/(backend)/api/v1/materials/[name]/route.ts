@@ -8,9 +8,11 @@ export async function GET(request: NextRequest) {
     const finalUrl = url.pathname.replace('/api/v1/materials/', '');
     const materialNameNormalized = decodeURIComponent(finalUrl);
 
-    const result = await material.findByMaterialName(materialNameNormalized);
+    const materialFound = await material.findByMaterialName(
+      materialNameNormalized
+    );
 
-    return NextResponse.json(result);
+    return NextResponse.json(materialFound[0]);
   } catch (error) {
     return errorHandler(error);
   }

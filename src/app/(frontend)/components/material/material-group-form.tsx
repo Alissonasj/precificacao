@@ -1,4 +1,4 @@
-import { createMaterialGroupAction } from '@/actions/materials-actions';
+import { createMaterialGroupRequest } from '@/requests/material-requests';
 import {
   MaterialGroupFormData,
   materialGroupFormSchema
@@ -27,7 +27,7 @@ export default function MaterialGroupForm() {
   });
 
   async function onSubmit(materialGroupInputValues: MaterialGroupFormData) {
-    const result = await createMaterialGroupAction(materialGroupInputValues);
+    const result = await createMaterialGroupRequest(materialGroupInputValues);
     alert(result.message);
     if (result.success) {
       hookForm.reset();

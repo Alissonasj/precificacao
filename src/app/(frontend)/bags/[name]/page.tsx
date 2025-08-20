@@ -1,5 +1,4 @@
-import { getOneBagAction } from '@/actions/bags-actions';
-import { getUsedMaterialsAction } from '@/actions/precification-actions';
+import { getOneBagRequest } from '@/requests/bag-requests';
 import EditDialog from '@components/bag/edit-dialog';
 import EditForm from '@components/bag/edit-form';
 import PrecificationDialog from '@components/bag/precification-dialog';
@@ -19,8 +18,7 @@ type BagDetailsProps = {
 
 export default async function BagDetails({ params }: BagDetailsProps) {
   const { name } = await params;
-  const bag = await getOneBagAction(name);
-  const usedMaterials = await getUsedMaterialsAction(bag.name);
+  const { bag, usedMaterials } = await getOneBagRequest(name);
 
   return (
     <>

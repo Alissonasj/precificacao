@@ -21,9 +21,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const createdBag = await bag.create(requestData);
+    const resultObject = await bag.create(requestData);
 
-    return NextResponse.json(createdBag, { status: 201 });
+    return NextResponse.json(resultObject, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }
@@ -32,13 +32,13 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const result = await bag.deleteById(requestData);
+    const resultObject = await bag.deleteById(requestData.bagId);
 
-    if (result) {
-      await precification.deleteByBagName(result.name);
+    if (resultObject.success) {
+      await precification.deleteUsedMaterialsByBagName(resultObject.data!.name);
     }
 
-    return NextResponse.json(result);
+    return NextResponse.json(resultObject);
   } catch (error) {
     return errorHandler(error);
   }

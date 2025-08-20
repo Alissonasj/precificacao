@@ -1,4 +1,5 @@
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
+import { serverObjectReturn } from '@/lib/utils';
 import {
   MaterialInsertDatabase,
   MaterialSelectDatabase
@@ -10,12 +11,15 @@ import { and, eq, ne, sql } from 'drizzle-orm';
 async function create(materialInputValues: MaterialInsertDatabase) {
   await existsMaterial(materialInputValues.name);
 
-  const createdMaterial = await database.client
+  await database.client
     .insert(materialsTable)
     .values(materialInputValues)
     .returning();
 
-  return createdMaterial[0];
+  return serverObjectReturn({
+    message: 'Material cadastrado com sucesso.',
+    status_code: 201
+  });
 
   async function existsMaterial(materialName: string) {
     const result = await findOneByName(materialName);
@@ -45,34 +49,23 @@ async function findAll() {
 }
 
 async function findOneById(id: string) {
-  try {
-    const materialFound = await database.client
-      .select()
-      .from(materialsTable)
-      .where(eq(materialsTable.id, id));
+  const materialFound = await database.client
+    .select()
+    .from(materialsTable)
+    .where(eq(materialsTable.id, id));
 
-    return materialFound[0];
-  } catch (error) {
-    throw new NotFoundError({ message: 'ID não encontrado.', cause: error });
-  }
+  return materialFound[0];
 }
 
 async function findOneByName(materialName: string) {
-  try {
-    const materialFound = await database.client
-      .select()
-      .from(materialsTable)
-      .where(
-        eq(sql`LOWER(${materialsTable.name})`, materialName.toLocaleLowerCase())
-      );
+  const materialFound = await database.client
+    .select()
+    .from(materialsTable)
+    .where(
+      eq(sql`LOWER(${materialsTable.name})`, materialName.toLocaleLowerCase())
+    );
 
-    return materialFound[0];
-  } catch (error) {
-    throw new NotFoundError({
-      message: 'Material não encontrado.',
-      cause: error
-    });
-  }
+  return materialFound[0];
 }
 
 async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
@@ -81,25 +74,28 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
     updatedMaterialInputValues.id
   );
 
-  const result = await database.client
+  await database.client
     .update(materialsTable)
     .set({
       ...updatedMaterialInputValues,
       updatedAt: sql`NOW()`
     })
-    .where(eq(materialsTable.id, updatedMaterialInputValues.id))
-    .returning();
+    .where(eq(materialsTable.id, updatedMaterialInputValues.id));
 
-  return result[0];
+  return serverObjectReturn({
+    message: 'Material atualizado com sucesso.'
+  });
 }
 
-async function deleteById({ id }: { id: string }) {
+async function deleteById(id: string) {
   try {
-    const deletedMaterial = await database.client
+    await database.client
       .delete(materialsTable)
-      .where(eq(materialsTable.id, id))
-      .returning();
-    return deletedMaterial[0];
+      .where(eq(materialsTable.id, id));
+
+    return serverObjectReturn({
+      message: 'Material deletado com sucesso.'
+    });
   } catch (error) {
     throw new NotFoundError({
       message: 'O Material não pode ser deletado.',

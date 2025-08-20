@@ -1,6 +1,6 @@
 'use client';
 
-import { createMaterialAction } from '@/actions/materials-actions';
+import { createMaterialRequest } from '@/requests/material-requests';
 import { CalculationType } from '@/types/calculation-type';
 import { MaterialFormData, materialFormSchema } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +33,7 @@ export default function MaterialForm() {
   });
 
   async function onSubmit(materialInputValues: MaterialFormData) {
-    const result = await createMaterialAction(materialInputValues);
+    const result = await createMaterialRequest(materialInputValues);
     alert(result.message);
     if (result.success) {
       hookForm.reset();

@@ -1,6 +1,6 @@
 'use client';
 
-import { updateBagAction } from '@/actions/bags-actions';
+import { updateBagRequest } from '@/requests/bag-requests';
 import { BagFormData, bagFormSchema, BagSelectDatabase } from '@/types/bag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/shadcn/button';
@@ -32,7 +32,7 @@ export default function EditForm({ bagObject }: BagFormProps) {
   const router = useRouter();
 
   async function onSubmit(bagInputValues: BagFormData) {
-    const result = await updateBagAction(bagInputValues, bagObject.id);
+    const result = await updateBagRequest(bagInputValues, bagObject.id);
     alert(`${result.message}\n${result.action}`);
     if (result.success) {
       hookForm.reset();

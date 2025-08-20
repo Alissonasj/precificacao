@@ -1,6 +1,6 @@
 'use client';
 
-import { updateMaterialAction } from '@/actions/materials-actions';
+import { updateMaterialRequest } from '@/requests/material-requests';
 import { CalculationType } from '@/types/calculation-type';
 import {
   MaterialFormData,
@@ -41,7 +41,7 @@ export default function EditForm({ materialObject }: EditFormProps) {
   });
 
   async function onSubmit(materialInputValues: MaterialFormData) {
-    const result = await updateMaterialAction(
+    const result = await updateMaterialRequest(
       materialInputValues,
       materialObject.id
     );

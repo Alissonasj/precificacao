@@ -1,6 +1,6 @@
 'use client';
 
-import { createBagAction } from '@/actions/bags-actions';
+import { createBagRequest } from '@/requests/bag-requests';
 import { BagFormData, bagFormSchema } from '@/types/bag';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/shadcn/button';
@@ -29,9 +29,11 @@ export default function BagForm() {
   const router = useRouter();
 
   async function onSubmit(bagInputValues: BagFormData) {
-    const result = await createBagAction(bagInputValues);
-    alert(result.message);
-    if (result.success) {
+    const result = await createBagRequest(bagInputValues);
+
+    alert(`${result.message}\n${result.action}`);
+
+    if (result?.success) {
       hookForm.reset();
       router.refresh();
     }
