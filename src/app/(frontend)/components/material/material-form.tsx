@@ -1,5 +1,6 @@
 'use client';
 
+import { standardToast } from '@/lib/utils';
 import { createMaterialRequest } from '@/requests/material-requests';
 import { CalculationType } from '@/types/calculation-type';
 import { MaterialFormData, materialFormSchema } from '@/types/material';
@@ -34,7 +35,9 @@ export default function MaterialForm() {
 
   async function onSubmit(materialInputValues: MaterialFormData) {
     const result = await createMaterialRequest(materialInputValues);
-    alert(result.message);
+    standardToast(result.message, {
+      description: result.action
+    });
     if (result.success) {
       hookForm.reset();
       router.refresh();
@@ -45,7 +48,7 @@ export default function MaterialForm() {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8'
+        className='space-y-8 border-1 p-5 rounded-md'
       >
         <div>
           <div>

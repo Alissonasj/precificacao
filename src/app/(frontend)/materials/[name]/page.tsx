@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle
 } from '@ui/shadcn/card';
+import { ChevronLeftIcon } from 'lucide-react';
+import Link from 'next/link';
 
 type MaterialProps = {
   params: Promise<{ name: string }>;
@@ -19,11 +21,20 @@ export default async function MaterialDetails({ params }: MaterialProps) {
   const material = await getOneMaterialRequest(name);
 
   return (
-    <div>
+    <div className='space-y-2'>
+      <h1 className='text-3xl mb-10'>
+        Detalhes da <strong>{material.name}</strong>
+      </h1>
+      <Link
+        href='/materials'
+        className='inline-block border px-3 py-1 hover:bg-black hover:text-white rounded-md'
+      >
+        <ChevronLeftIcon />
+      </Link>
       <Card key={material.id}>
         <CardHeader>
           <CardTitle>
-            <h1>{material.name}</h1>
+            <h3>{material.name}</h3>
             <CardDescription>{material.id}</CardDescription>
           </CardTitle>
         </CardHeader>
@@ -40,7 +51,10 @@ export default async function MaterialDetails({ params }: MaterialProps) {
             <EditDialog title='Edite o Material'>
               <EditForm materialObject={material} />
             </EditDialog>
-            <DeleteButton id={material.id} />
+            <DeleteButton
+              id={material.id}
+              path='/materials'
+            />
           </div>
         </CardContent>
       </Card>

@@ -1,6 +1,3 @@
-'use client';
-
-import { getAllMaterialsRequest } from '@/requests/material-requests';
 import { MaterialSelectDatabase } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {
@@ -11,30 +8,18 @@ import {
   SelectTrigger,
   SelectValue
 } from '@ui/shadcn/select';
-import { useEffect, useState } from 'react';
 
 type MaterialSelectProps = {
-  onValueChange?: (value: string) => void;
-  defaultValue?: string;
+  onValueChange: (value: string) => void;
+  defaultValue: string;
+  materialOptions: MaterialSelectDatabase[];
 };
 
 export default function MaterialSelect({
   onValueChange,
-  defaultValue
+  defaultValue,
+  materialOptions
 }: MaterialSelectProps) {
-  const [materialOptions, setMaterialsOptions] = useState<
-    MaterialSelectDatabase[]
-  >([]);
-
-  async function fetchMaterials() {
-    const result = await getAllMaterialsRequest();
-    setMaterialsOptions(result);
-  }
-
-  useEffect(() => {
-    fetchMaterials();
-  }, []);
-
   return (
     <Select
       onValueChange={onValueChange}

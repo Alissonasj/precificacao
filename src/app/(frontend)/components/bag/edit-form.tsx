@@ -1,5 +1,6 @@
 'use client';
 
+import { standardToast } from '@/lib/utils';
 import { updateBagRequest } from '@/requests/bag-requests';
 import { BagFormData, bagFormSchema, BagSelectDatabase } from '@/types/bag';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +34,9 @@ export default function EditForm({ bagObject }: BagFormProps) {
 
   async function onSubmit(bagInputValues: BagFormData) {
     const result = await updateBagRequest(bagInputValues, bagObject.id);
-    alert(`${result.message}\n${result.action}`);
+    standardToast(result.message, {
+      description: result.action
+    });
     if (result.success) {
       hookForm.reset();
       router.push(`/bags/${bagInputValues.name.toLowerCase()}`);
@@ -44,7 +47,7 @@ export default function EditForm({ bagObject }: BagFormProps) {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8'
+        className='space-y-8 rounded-md'
       >
         <FormField
           control={hookForm.control}

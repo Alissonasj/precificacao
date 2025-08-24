@@ -1,7 +1,7 @@
-import { Button } from '@ui/shadcn/button';
+import ActiveLink from '@ui/active-link';
+import { Toaster } from '@ui/shadcn/sonner';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Link from 'next/link';
 import './globals.css';
 
 const geistSans = Geist({
@@ -27,22 +27,35 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased justify-center p-5`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header>
-          <menu className='pb-5 space-x-2.5'>
-            <Link href='/'>
-              <Button variant={'outline'}>Início</Button>
-            </Link>
-            <Link href='/materials'>
-              <Button variant={'outline'}>Materiais</Button>
-            </Link>
-            <Link href='/bags'>
-              <Button variant={'outline'}>Bolsas</Button>
-            </Link>
-          </menu>
+        <header className='border-b'>
+          <div className='text-2xl p-8 text-center border-b uppercase'>
+            Precificação de Bolsas
+          </div>
+          <nav className='flex justify-center gap-2.5 my-1'>
+            <ActiveLink
+              href='/'
+              className='px-5 py-1.5 hover:bg-black hover:text-white'
+            >
+              Início
+            </ActiveLink>
+            <ActiveLink
+              href='/materials'
+              className='px-5 py-1.5 hover:bg-black hover:text-white'
+            >
+              Materiais
+            </ActiveLink>
+            <ActiveLink
+              href='/bags'
+              className='px-5 py-1.5 hover:bg-black hover:text-white'
+            >
+              Bolsas
+            </ActiveLink>
+          </nav>
         </header>
-        {children}
+        <div className='max-w-5xl mx-auto mt-10'>{children}</div>
+        <Toaster />
       </body>
     </html>
   );

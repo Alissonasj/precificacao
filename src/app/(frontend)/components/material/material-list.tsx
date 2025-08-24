@@ -15,7 +15,7 @@ export default function MaterialList({
   materials: MaterialSelectDatabase[];
 }) {
   return (
-    <div className='space-y-4 overflow-y-auto'>
+    <div className='grid grid-cols-2 gap-4'>
       {materials?.map((m) => {
         return (
           <Card key={m.id}>

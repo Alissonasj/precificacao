@@ -4,13 +4,14 @@ import EditForm from '@components/bag/edit-form';
 import PrecificationDialog from '@components/bag/precification-dialog';
 import PrecificationForm from '@components/bag/precification-form';
 import DeleteButton from '@components/bag/ui/delete-button';
-
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader
 } from '@ui/shadcn/card';
+import { ChevronLeftIcon } from 'lucide-react';
+import Link from 'next/link';
 
 type BagDetailsProps = {
   params: Promise<{ name: string }>;
@@ -21,12 +22,19 @@ export default async function BagDetails({ params }: BagDetailsProps) {
   const { bag, usedMaterials } = await getOneBagRequest(name);
 
   return (
-    <>
+    <div className='space-y-4'>
+      <h1 className='text-3xl mb-10'>
+        Detalhes da <strong>{bag.name}</strong>
+      </h1>
+      <Link
+        href='/bags'
+        className='inline-block border px-3 py-1 hover:bg-black hover:text-white rounded-md'
+      >
+        <ChevronLeftIcon />
+      </Link>
       <Card>
         <CardHeader>
-          <h2>
-            Detalhes da <strong>{bag.name}</strong>
-          </h2>
+          <h3>{bag.name}</h3>
           <CardDescription>{bag.id}</CardDescription>
         </CardHeader>
         <CardContent className='flex justify-between'>
@@ -46,31 +54,41 @@ export default async function BagDetails({ params }: BagDetailsProps) {
             <EditDialog title='Edite a Bolsa'>
               <EditForm bagObject={bag} />
             </EditDialog>
-            <DeleteButton id={bag.id} />
+            <DeleteButton
+              id={bag.id}
+              path='/bags'
+            />
           </div>
         </CardContent>
       </Card>
 
-      {usedMaterials.map((material) => {
-        return (
-          <Card key={material.id}>
-            <CardHeader>
-              <h2>
-                <strong>{material.fkMaterial}</strong>
-              </h2>
-            </CardHeader>
-            <CardContent>
-              <ul>
-                <li>Unidades: {material.unity}</li>
-                <li>Largura: {material.width}</li>
-                <li>Comprimento: {material.length}</li>
-                <li>Camadas: {material.layers}</li>
-                <li>Preço Calculado: {material.calculatedPrice}</li>
-              </ul>
-            </CardContent>
-          </Card>
-        );
-      })}
-    </>
+      {usedMaterials.length > 0 && (
+        <div className='space-y-2'>
+          <h2 className='text-[1.2rem]'>Materiais Utilizados</h2>
+          <div className='grid grid-cols-3 gap-4'>
+            {usedMaterials.map((material) => {
+              return (
+                <Card key={material.id}>
+                  <CardHeader>
+                    <h2>
+                      <strong>{material.fkMaterial}</strong>
+                    </h2>
+                  </CardHeader>
+                  <CardContent>
+                    <ul>
+                      <li>Unidades: {material.unity}</li>
+                      <li>Largura: {material.width}</li>
+                      <li>Comprimento: {material.length}</li>
+                      <li>Camadas: {material.layers}</li>
+                      <li>Preço Calculado: {material.calculatedPrice}</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

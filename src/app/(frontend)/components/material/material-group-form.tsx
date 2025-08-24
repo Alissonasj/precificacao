@@ -1,3 +1,4 @@
+import { standardToast } from '@/lib/utils';
 import { createMaterialGroupRequest } from '@/requests/material-requests';
 import {
   MaterialGroupFormData,
@@ -28,7 +29,9 @@ export default function MaterialGroupForm() {
 
   async function onSubmit(materialGroupInputValues: MaterialGroupFormData) {
     const result = await createMaterialGroupRequest(materialGroupInputValues);
-    alert(result.message);
+    standardToast(result.message, {
+      description: result.action
+    });
     if (result.success) {
       hookForm.reset();
       router.refresh();
@@ -39,7 +42,7 @@ export default function MaterialGroupForm() {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8'
+        className='space-y-8 rounded-md'
       >
         <FormField
           control={hookForm.control}

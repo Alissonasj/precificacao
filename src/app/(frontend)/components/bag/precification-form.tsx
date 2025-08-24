@@ -1,8 +1,10 @@
 'use client';
 
-import { getOneMaterialRequest } from '@/requests/material-requests';
+import { standardToast } from '@/lib/utils';
+import { getAllMaterialsRequest } from '@/requests/material-requests';
 import { createPrecificationRequest } from '@/requests/precification-requests';
 import { CalculationType } from '@/types/calculation-type';
+import { MaterialSelectDatabase } from '@/types/material';
 import {
   PrecificationFormData,
   precificationFormSchema
@@ -21,7 +23,7 @@ import {
 import { Input } from '@ui/shadcn/input';
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 export default function PrecificationForm({
@@ -53,7 +55,19 @@ export default function PrecificationForm({
   const [calculationType, setCalculationType] = useState<{
     [key: number]: string;
   }>({});
+  const [materialOptions, setMaterialsOptions] = useState<
+    MaterialSelectDatabase[]
+  >([]);
   const router = useRouter();
+
+  async function fetchMaterials() {
+    const result = await getAllMaterialsRequest();
+    setMaterialsOptions(result);
+  }
+
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
 
   async function onSubmit(formInputValues: PrecificationFormData) {
     const result = await createPrecificationRequest(
@@ -61,7 +75,9 @@ export default function PrecificationForm({
       bagName,
       hoursWorked
     );
-    alert(result.message);
+    standardToast(result.message, {
+      description: result.action
+    });
     if (result.success) {
       hookForm.reset();
       hookFields.remove();
@@ -70,16 +86,22 @@ export default function PrecificationForm({
   }
 
   async function handleChange(materialName: string, index: number) {
-    const result = await getOneMaterialRequest(materialName);
+    const result = materialOptions.find(
+      (material) => material.name === materialName
+    );
+
     hookForm.setValue(`materials.${index}.fkMaterial`, materialName);
-    setCalculationType({ ...calculationType, [index]: result.calculationType });
+    setCalculationType({
+      ...calculationType,
+      [index]: result!.calculationType
+    });
   }
 
   return (
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='px-6 space-y-10'
+        className='px-6 space-y-8 rounded-md'
       >
         {hookFields.fields.map((hookField, index) => {
           return (
@@ -99,6 +121,7 @@ export default function PrecificationForm({
                           handleChange(value, index);
                         }}
                         defaultValue={field.value}
+                        materialOptions={materialOptions}
                       />
                       <FormMessage />
                     </FormItem>

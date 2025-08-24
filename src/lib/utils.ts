@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { ExternalToast, toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -31,4 +32,12 @@ export function serverObjectReturn<T>(attributes: serverObjectReturnProps<T>) {
     success: attributes?.success ?? true,
     data: attributes?.dataObject
   };
+}
+
+export function standardToast(message: string, data?: ExternalToast) {
+  toast(message, {
+    ...data,
+    position: 'top-center',
+    closeButton: true
+  });
 }

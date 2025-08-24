@@ -1,5 +1,6 @@
 'use client';
 
+import { standardToast } from '@/lib/utils';
 import { updateMaterialRequest } from '@/requests/material-requests';
 import { CalculationType } from '@/types/calculation-type';
 import {
@@ -45,7 +46,9 @@ export default function EditForm({ materialObject }: EditFormProps) {
       materialInputValues,
       materialObject.id
     );
-    alert(`${result.message}\n${result.action}`);
+    standardToast(result.message, {
+      description: result.action
+    });
     if (result.success) {
       hookForm.reset();
       router.push(`/materials/${materialInputValues.name.toLocaleLowerCase()}`);
@@ -56,7 +59,7 @@ export default function EditForm({ materialObject }: EditFormProps) {
     <Form {...hookForm}>
       <form
         onSubmit={hookForm.handleSubmit(onSubmit)}
-        className='space-y-8'
+        className='space-y-8 rounded-md'
       >
         <div>
           <div>

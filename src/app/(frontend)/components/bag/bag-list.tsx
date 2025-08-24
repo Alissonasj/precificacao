@@ -11,7 +11,7 @@ import DeleteButton from './ui/delete-button';
 
 export default function BagList({ bags }: { bags: BagSelectDatabase[] }) {
   return (
-    <div className='space-y-4 overflow-y-auto'>
+    <div className='grid grid-cols-2 gap-4'>
       {bags?.map((b) => {
         return (
           <Card key={b.id}>
