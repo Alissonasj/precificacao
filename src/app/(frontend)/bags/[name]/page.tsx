@@ -70,9 +70,13 @@ export default async function BagDetails({ params }: BagDetailsProps) {
               return (
                 <Card key={material.id}>
                   <CardHeader>
-                    <h2>
-                      <strong>{material.fkMaterial}</strong>
-                    </h2>
+                    <Link
+                      href={`/materials/${material.fkMaterial.toLocaleLowerCase()}`}
+                    >
+                      <h2>
+                        <strong>{material.fkMaterial}</strong>
+                      </h2>
+                    </Link>
                   </CardHeader>
                   <CardContent>
                     <ul>
