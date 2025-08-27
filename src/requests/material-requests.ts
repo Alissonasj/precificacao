@@ -1,7 +1,7 @@
 import {
   MaterialFormData,
   MaterialGroupFormData,
-  MaterialSelectDatabase
+  MaterialSelectDb
 } from '@/types/material';
 
 //Materials
@@ -22,7 +22,7 @@ export async function getAllMaterialsRequest() {
   const response = await fetch('http://localhost:3000/api/v1/materials');
   const responseData = await response.json();
 
-  return responseData as MaterialSelectDatabase[];
+  return responseData as MaterialSelectDb[];
 }
 
 export async function getOneMaterialRequest(materialName: string) {
@@ -31,7 +31,7 @@ export async function getOneMaterialRequest(materialName: string) {
   );
   const responseData = await response.json();
 
-  return responseData as MaterialSelectDatabase;
+  return responseData as MaterialSelectDb;
 }
 
 export async function deleteMaterialRequest(materialId: string) {

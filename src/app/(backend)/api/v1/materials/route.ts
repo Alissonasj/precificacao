@@ -20,9 +20,9 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const createdMaterial = await material.create(requestData);
+    const publicDataObject = await material.create(requestData);
 
-    return NextResponse.json(createdMaterial, { status: 201 });
+    return NextResponse.json(publicDataObject, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }
@@ -31,9 +31,9 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const requestData = await request.json();
-    const deletedMaterial = await material.deleteById(requestData.materialId);
+    const publicDataObject = await material.deleteById(requestData.materialId);
 
-    return NextResponse.json(deletedMaterial);
+    return NextResponse.json(publicDataObject);
   } catch (error) {
     return errorHandler(error);
   }

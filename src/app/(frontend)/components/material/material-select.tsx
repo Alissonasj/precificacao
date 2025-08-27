@@ -1,4 +1,4 @@
-import { MaterialSelectDatabase } from '@/types/material';
+import { MaterialSelectDb } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {
   Select,
@@ -12,7 +12,7 @@ import {
 type MaterialSelectProps = {
   onValueChange: (value: string) => void;
   defaultValue: string;
-  materialOptions: MaterialSelectDatabase[];
+  materialOptions: MaterialSelectDb[];
 };
 
 export default function MaterialSelect({

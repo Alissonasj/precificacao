@@ -1,11 +1,11 @@
 import { serverObjectReturn } from '@/lib/utils';
-import { MaterialGroupInsertDatabase } from '@/types/material';
+import { MaterialGroupInsertDb } from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { materialGroupsTable } from '@db_schemas/material';
 import { eq, sql } from 'drizzle-orm';
 
-async function create(materialGroups: MaterialGroupInsertDatabase) {
+async function create(materialGroups: MaterialGroupInsertDb) {
   await validateUniqueGroup(materialGroups.name);
 
   await database.client.insert(materialGroupsTable).values(materialGroups);

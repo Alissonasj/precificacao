@@ -1,5 +1,5 @@
 import { getAllMaterialGroupsAction } from '@/actions/actions';
-import { MaterialGroupSelectDatabase } from '@/types/material';
+import { MaterialGroupSelectDb } from '@/types/material';
 import { FormControl } from '@ui/shadcn/form';
 import {
   Select,
@@ -21,7 +21,7 @@ export default function MaterialGroupsSelect({
   defaultValue
 }: MaterialGroupsSelectProps) {
   const [materialGroupsOptions, setMaterialGroupsOptions] = useState<
-    MaterialGroupSelectDatabase[]
+    MaterialGroupSelectDb[]
   >([]);
 
   async function fetchMaterialGroups() {

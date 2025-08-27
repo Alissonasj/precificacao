@@ -6,7 +6,7 @@ import { CalculationType } from '@/types/calculation-type';
 import {
   MaterialFormData,
   materialFormSchema,
-  MaterialSelectDatabase
+  MaterialSelectDb
 } from '@/types/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@ui/shadcn/button';
@@ -26,7 +26,7 @@ import MaterialGroupDialog from './material-group-dialog';
 import MaterialGroupsSelect from './material-groups-select';
 
 type EditFormProps = {
-  materialObject: MaterialSelectDatabase;
+  materialObject: MaterialSelectDb;
 };
 
 export default function EditForm({ materialObject }: EditFormProps) {

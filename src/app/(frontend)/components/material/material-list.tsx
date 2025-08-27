@@ -1,4 +1,4 @@
-import { MaterialSelectDatabase } from '@/types/material';
+import { MaterialSelectDb } from '@/types/material';
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ import DeleteButton from './ui/delete-button';
 export default function MaterialList({
   materials
 }: {
-  materials: MaterialSelectDatabase[];
+  materials: MaterialSelectDb[];
 }) {
   return (
     <div className='grid grid-cols-2 gap-4'>

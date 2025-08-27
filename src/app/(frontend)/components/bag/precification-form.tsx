@@ -4,7 +4,7 @@ import { standardToast } from '@/lib/utils';
 import { getAllMaterialsRequest } from '@/requests/material-requests';
 import { createPrecificationRequest } from '@/requests/precification-requests';
 import { CalculationType } from '@/types/calculation-type';
-import { MaterialSelectDatabase } from '@/types/material';
+import { MaterialSelectDb } from '@/types/material';
 import {
   PrecificationFormData,
   precificationFormSchema
@@ -55,9 +55,9 @@ export default function PrecificationForm({
   const [calculationType, setCalculationType] = useState<{
     [key: number]: string;
   }>({});
-  const [materialOptions, setMaterialsOptions] = useState<
-    MaterialSelectDatabase[]
-  >([]);
+  const [materialOptions, setMaterialsOptions] = useState<MaterialSelectDb[]>(
+    []
+  );
   const router = useRouter();
 
   async function fetchMaterials() {
