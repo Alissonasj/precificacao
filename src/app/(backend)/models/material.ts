@@ -1,20 +1,17 @@
 import { materialsTable } from '@/app/(backend)/infra/schemas/material';
-import { serverObjectReturn } from '@/lib/utils';
-import {
-  MaterialInsertDatabase,
-  MaterialSelectDatabase
-} from '@/types/material';
+import { queryToReal, serverObjectReturn, toCents } from '@/lib/utils';
+import { MaterialInsertDb, MaterialSelectDb } from '@/types/material';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
-import { and, eq, ne, sql } from 'drizzle-orm';
+import { and, eq, getTableColumns, ne, sql } from 'drizzle-orm';
 
-async function create(materialInputValues: MaterialInsertDatabase) {
+async function create(materialInputValues: MaterialInsertDb) {
   await existsMaterial(materialInputValues.name);
 
-  await database.client
-    .insert(materialsTable)
-    .values(materialInputValues)
-    .returning();
+  await database.client.insert(materialsTable).values({
+    ...materialInputValues,
+    price: toCents(materialInputValues.price)
+  });
 
   return serverObjectReturn({
     message: 'Material cadastrado com sucesso.',
@@ -35,7 +32,10 @@ async function create(materialInputValues: MaterialInsertDatabase) {
 
 async function findByMaterialName(materialName: string) {
   const materialsFound = await database.client
-    .select()
+    .select({
+      ...getTableColumns(materialsTable),
+      price: queryToReal(materialsTable.price)
+    })
     .from(materialsTable)
     .where(sql`unaccent(name) ILIKE unaccent(${`%${materialName}%`})`);
 
@@ -43,14 +43,22 @@ async function findByMaterialName(materialName: string) {
 }
 
 async function findAll() {
-  const allMaterials = await database.client.select().from(materialsTable);
+  const allMaterials = await database.client
+    .select({
+      ...getTableColumns(materialsTable),
+      price: queryToReal(materialsTable.price)
+    })
+    .from(materialsTable);
 
   return allMaterials;
 }
 
 async function findOneById(id: string) {
   const materialFound = await database.client
-    .select()
+    .select({
+      ...getTableColumns(materialsTable),
+      price: queryToReal(materialsTable.price)
+    })
     .from(materialsTable)
     .where(eq(materialsTable.id, id));
 
@@ -59,16 +67,17 @@ async function findOneById(id: string) {
 
 async function findOneByName(materialName: string) {
   const materialFound = await database.client
-    .select()
+    .select({
+      ...getTableColumns(materialsTable),
+      price: queryToReal(materialsTable.price)
+    })
     .from(materialsTable)
-    .where(
-      eq(sql`LOWER(${materialsTable.name})`, materialName.toLocaleLowerCase())
-    );
+    .where(eq(sql`LOWER(${materialsTable.name})`, materialName.toLowerCase()));
 
   return materialFound[0];
 }
 
-async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
+async function update(updatedMaterialInputValues: MaterialSelectDb) {
   await validateUniqueMaterial(
     updatedMaterialInputValues.name,
     updatedMaterialInputValues.id
@@ -78,6 +87,7 @@ async function update(updatedMaterialInputValues: MaterialSelectDatabase) {
     .update(materialsTable)
     .set({
       ...updatedMaterialInputValues,
+      price: toCents(updatedMaterialInputValues.price),
       updatedAt: sql`NOW()`
     })
     .where(eq(materialsTable.id, updatedMaterialInputValues.id));

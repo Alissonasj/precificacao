@@ -1,4 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
+import { SQL, sql } from 'drizzle-orm';
+import { PgColumn } from 'drizzle-orm/pg-core';
 import { ExternalToast, toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
@@ -40,4 +42,12 @@ export function standardToast(message: string, data?: ExternalToast) {
     position: 'top-center',
     closeButton: true
   });
+}
+
+export function toCents(number: number) {
+  return Math.round(number * 100);
+}
+
+export function queryToReal(number: PgColumn): SQL<number> {
+  return sql<number>`${number} / 100`.mapWith(Number);
 }

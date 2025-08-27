@@ -1,9 +1,9 @@
-import { serverObjectReturn } from '@/lib/utils';
+import { queryToReal, serverObjectReturn } from '@/lib/utils';
 import { BagInsertDatabase, BagSelectDatabase } from '@/types/bag';
 import { database } from '@backend/infra/database';
 import { NotFoundError, ValidationError } from '@backend/infra/errors';
 import { bagsTable } from '@db_schemas/bag';
-import { and, eq, ne, sql } from 'drizzle-orm';
+import { and, eq, getTableColumns, ne, sql } from 'drizzle-orm';
 
 async function create(bagInputValues: BagInsertDatabase) {
   await existsBag(bagInputValues.name);
@@ -28,14 +28,22 @@ async function create(bagInputValues: BagInsertDatabase) {
 }
 
 async function findAll() {
-  const allBags = await database.client.select().from(bagsTable);
+  const allBags = await database.client
+    .select({
+      ...getTableColumns(bagsTable),
+      suggestedPrice: queryToReal(bagsTable.suggestedPrice)
+    })
+    .from(bagsTable);
 
   return allBags;
 }
 
 async function findByBagName(bagName: string) {
   const result = await database.client
-    .select()
+    .select({
+      ...getTableColumns(bagsTable),
+      suggestedPrice: queryToReal(bagsTable.suggestedPrice)
+    })
     .from(bagsTable)
     .where(sql`unaccent(name) ILIKE unaccent(${`%${bagName}%`})`);
 
@@ -45,7 +53,10 @@ async function findByBagName(bagName: string) {
 async function findOneById(id: string) {
   try {
     const bagFound = await database.client
-      .select()
+      .select({
+        ...getTableColumns(bagsTable),
+        suggestedPrice: queryToReal(bagsTable.suggestedPrice)
+      })
       .from(bagsTable)
       .where(eq(bagsTable.id, id));
 
@@ -58,7 +69,10 @@ async function findOneById(id: string) {
 async function findOneByName(bagName: string) {
   try {
     const bagFound = await database.client
-      .select()
+      .select({
+        ...getTableColumns(bagsTable),
+        suggestedPrice: queryToReal(bagsTable.suggestedPrice)
+      })
       .from(bagsTable)
       .where(eq(sql`LOWER(${bagsTable.name})`, bagName.toLocaleLowerCase()));
 
