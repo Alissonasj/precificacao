@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@ui/shadcn/button';
 import {
   Dialog,
@@ -7,15 +9,24 @@ import {
   DialogTrigger
 } from '@ui/shadcn/dialog';
 
-export default function PrecificationDialog({
-  children
-}: {
+type PrecificationDialogProps = {
   children?: React.ReactNode;
-}) {
+  disabled?: boolean;
+};
+
+export default function PrecificationDialog({
+  children,
+  disabled
+}: PrecificationDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>Precificar</Button>
+        <Button
+          variant='outline'
+          disabled={disabled}
+        >
+          Precificar
+        </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px] max-h-[80vh] overflow-y-auto'>
         <DialogHeader>

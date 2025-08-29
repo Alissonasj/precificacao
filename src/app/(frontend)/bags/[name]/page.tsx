@@ -20,6 +20,7 @@ type BagDetailsProps = {
 export default async function BagDetails({ params }: BagDetailsProps) {
   const { name } = await params;
   const { bag, usedMaterials } = await getOneBagRequest(name);
+  const haveUsedMaterial = usedMaterials.length > 0;
 
   return (
     <div className='space-y-4'>
@@ -45,13 +46,16 @@ export default async function BagDetails({ params }: BagDetailsProps) {
             <li>Atualizado em: {bag.updatedAt.toString()}</li>
           </ul>
           <div className='flex gap-2.5'>
-            <PrecificationDialog>
+            <PrecificationDialog disabled={haveUsedMaterial}>
               <PrecificationForm
                 bagName={bag.name}
                 hoursWorked={bag.hoursWorked}
               />
             </PrecificationDialog>
-            <EditDialog title='Edite a Bolsa'>
+            <EditDialog
+              title='Edite a Bolsa'
+              disabled={haveUsedMaterial}
+            >
               <EditForm bagObject={bag} />
             </EditDialog>
             <DeleteButton
@@ -62,7 +66,7 @@ export default async function BagDetails({ params }: BagDetailsProps) {
         </CardContent>
       </Card>
 
-      {usedMaterials.length > 0 && (
+      {haveUsedMaterial && (
         <div className='space-y-2'>
           <h2 className='text-[1.2rem]'>Materiais Utilizados</h2>
           <div className='grid grid-cols-3 gap-4'>

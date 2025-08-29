@@ -1,10 +1,10 @@
-import { queryToReal, serverObjectReturn, toCents } from '@/lib/utils';
-import { CalculationType } from '@/types/calculation-type';
-import { PrecificationInsertDatabase } from '@/types/precification';
-import { database } from '@backend/infra/database';
-import { ValidationError } from '@backend/infra/errors';
-import { precificationsTable } from '@db_schemas/precification';
-import { eq, getTableColumns, sql } from 'drizzle-orm';
+import {queryToReal, serverObjectReturn, toCents} from '@/lib/utils';
+import {CalculationType} from '@/types/calculation-type';
+import {PrecificationInsertDatabase} from '@/types/precification';
+import {database} from '@backend/infra/database';
+import {ValidationError} from '@backend/infra/errors';
+import {precificationsTable} from '@db_schemas/precification';
+import {eq, getTableColumns, sql} from 'drizzle-orm';
 import bag from './bag';
 import material from './material';
 
@@ -66,7 +66,7 @@ async function create(
 
     const result = await bag.findByBagName(bagMaterialsInpuntValues[0].fkBag);
 
-    bag.update({
+    await bag.update({
       ...result[0],
       suggestedPrice: toCents(calculatedPriceTotal * totalPercentage)
     });
@@ -76,7 +76,7 @@ async function create(
       status_code: 201
     });
   } catch (error) {
-    throw new ValidationError({ cause: error });
+    throw new ValidationError({cause: error});
   }
 }
 
@@ -88,7 +88,9 @@ async function findUsedMaterials(bagName: string) {
     })
     .from(precificationsTable)
     .where(
-      eq(sql`LOWER(${precificationsTable.fkBag})`, bagName.toLocaleLowerCase())
+      eq(sql`LOWER(
+      ${precificationsTable.fkBag}
+      )`, bagName.toLocaleLowerCase())
     );
 
   return result;
@@ -98,7 +100,9 @@ async function deleteUsedMaterialsByBagName(bagName: string) {
   await database.client
     .delete(precificationsTable)
     .where(
-      eq(sql`LOWER(${precificationsTable.fkBag})`, bagName.toLocaleLowerCase())
+      eq(sql`LOWER(
+      ${precificationsTable.fkBag}
+      )`, bagName.toLocaleLowerCase())
     );
 
   return serverObjectReturn({

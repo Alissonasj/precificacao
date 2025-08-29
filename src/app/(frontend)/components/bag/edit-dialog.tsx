@@ -11,13 +11,21 @@ import { PencilIcon } from 'lucide-react';
 type EditDialogProps = {
   title?: React.ReactNode;
   children?: React.ReactNode;
+  disabled?: boolean;
 };
 
-export default function EditDialog({ title, children }: EditDialogProps) {
+export default function EditDialog({
+  title,
+  children,
+  disabled
+}: EditDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='outline'>
+        <Button
+          variant='outline'
+          disabled={disabled}
+        >
           <PencilIcon />
         </Button>
       </DialogTrigger>
