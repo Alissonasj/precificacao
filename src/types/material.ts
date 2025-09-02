@@ -2,7 +2,7 @@ import {
   materialGroupsTable,
   materialsTable
 } from '@/app/(backend)/infra/schemas/material';
-import * as z from 'zod';
+import { z } from 'zod';
 
 export type MaterialInsertDb = typeof materialsTable.$inferInsert;
 export type MaterialSelectDb = typeof materialsTable.$inferSelect;

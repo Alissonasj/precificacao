@@ -1,5 +1,5 @@
 import { bagsTable } from '@db_schemas/bag';
-import * as z from 'zod';
+import { z } from 'zod';
 
 export type BagInsertDatabase = typeof bagsTable.$inferInsert;
 export type BagSelectDatabase = typeof bagsTable.$inferSelect;
