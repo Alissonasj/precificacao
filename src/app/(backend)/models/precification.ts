@@ -81,7 +81,7 @@ async function create(
 }
 
 async function findUsedMaterials(bagName: string) {
-  const result = await database.client
+  return database.client
     .select({
       ...getTableColumns(precificationsTable),
       calculatedPrice: queryToReal(precificationsTable.calculatedPrice)
@@ -92,8 +92,6 @@ async function findUsedMaterials(bagName: string) {
       ${precificationsTable.fkBag}
       )`, bagName.toLocaleLowerCase())
     );
-
-  return result;
 }
 
 async function deleteUsedMaterialsByBagName(bagName: string) {
