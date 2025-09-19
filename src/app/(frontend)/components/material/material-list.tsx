@@ -29,7 +29,13 @@ export default function MaterialList({
             </Link>
             <CardContent className='flex justify-between'>
               <ul>
-                <li>Preço: {m.price}</li>
+                <li>
+                  Preço:{' '}
+                  {m.price.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  })}
+                </li>
                 <li>Largura Base: {m.baseWidth} cm</li>
                 <li>Grupo: {m.fkGroup}</li>
                 <li>Criado em: {m.createdAt.toString()}</li>

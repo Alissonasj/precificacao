@@ -7,7 +7,8 @@ export type BagSelectDatabase = typeof bagsTable.$inferSelect;
 export const bagFormSchema = z.object({
   name: z.string().min(1, { message: 'Campo obrigatório.' }),
   hoursWorked: z.string().min(1, { message: 'Campo obrigatório.' }),
-  suggestedPrice: z.number().optional()
+  suggestedPrice: z.number().optional(),
+  photo: z.file().nullable()
 });
 
 export type BagFormData = z.infer<typeof bagFormSchema>;

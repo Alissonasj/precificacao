@@ -15,9 +15,11 @@ import {
 } from '@ui/shadcn/form';
 import { Input } from '@ui/shadcn/input';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function BagForm() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const hookForm = useForm<BagFormData>({
     resolver: zodResolver(bagFormSchema),
     defaultValues: {
@@ -29,7 +31,10 @@ export default function BagForm() {
   const router = useRouter();
 
   async function onSubmit(bagInputValues: BagFormData) {
-    const result = await createBagRequest(bagInputValues);
+    const result = await createBagRequest({
+      ...bagInputValues,
+      photo: selectedFile
+    });
     standardToast(result.message, {
       description: result.action
     });
@@ -79,8 +84,82 @@ export default function BagForm() {
           )}
         />
 
+        <FormField
+          control={hookForm.control}
+          name='photo'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Foto da Bolsa</FormLabel>
+              <FormControl>
+                <ImageUploader onFileSelect={setSelectedFile} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type='submit'>Cadastrar</Button>
       </form>
     </Form>
+  );
+}
+
+type ImageUploaderProps = {
+  onFileSelect: (file: File | null) => void;
+};
+
+function ImageUploader({ onFileSelect }: ImageUploaderProps) {
+  // Estado para guardar o arquivo selecionado
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // Estado para guardar a URL de preview
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Efeito para criar e limpar a URL de preview
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreviewUrl(null);
+      return;
+    }
+
+    // 1. Cria uma URL temporária para o objeto do arquivo
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreviewUrl(objectUrl);
+
+    // 2. Função de limpeza: revoga a URL para liberar memória
+    // Isso é importante para evitar memory leaks (vazamentos de memória)
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  // Função para lidar com a seleção do arquivo
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file =
+      event.target.files && event.target.files[0]
+        ? event.target.files[0]
+        : null;
+
+    setSelectedFile(file);
+
+    onFileSelect(file);
+  };
+
+  return (
+    <>
+      <Input
+        type='file'
+        accept='image/*'
+        onChange={handleFileChange}
+      />
+
+      {previewUrl && (
+        <div style={{ marginTop: '20px' }}>
+          <h4>Preview:</h4>
+          <img
+            src={previewUrl}
+            alt='Preview da imagem selecionada'
+            style={{ maxWidth: '300px', height: 'auto' }}
+          />
+        </div>
+      )}
+    </>
   );
 }

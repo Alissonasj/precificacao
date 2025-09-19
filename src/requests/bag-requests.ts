@@ -19,11 +19,18 @@ export async function getAllBagsRequest() {
 }
 
 export async function createBagRequest(bagInputValues: BagFormData) {
+  let fileBuffed = null;
+
+  if (bagInputValues.photo) {
+    fileBuffed = Buffer.from(await bagInputValues.photo.arrayBuffer());
+  }
+
   const response = await fetch('http://localhost:3000/api/v1/bags', {
     method: 'POST',
     body: JSON.stringify({
       ...bagInputValues,
-      hoursWorked: Number(bagInputValues.hoursWorked)
+      hoursWorked: Number(bagInputValues.hoursWorked),
+      photo: fileBuffed
     })
   });
   const responseData = await response.json();
